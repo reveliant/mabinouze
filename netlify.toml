@@ -1,0 +1,30 @@
+[build]
+  command = "bash ./build.sh"
+
+[context.production.environment]
+  HUGO_ENV = "netlify"
+  HUGO_ENABLEGITINFO = "true"
+
+[context.deploy-preview.environment]
+
+[context.branch-deploy.environment]
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; base-uri 'none'; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com ; form-action 'none'; frame-ancestors 'self'; img-src 'self' https://unsplash.com https://images.unsplash.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), microphone=()"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Content-Security-Policy = "default-src 'none'; style-src 'self' 'unsafe-inline'"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), microphone=()"
