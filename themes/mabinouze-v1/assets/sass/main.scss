@@ -4,6 +4,10 @@ $warning: $orange;
 
 @import 'bootstrap/bootstrap';
 
+.small-caps {
+    font-variant: small-caps;
+}
+
 body > main > .hero {
     background-image: url(https://unsplash.com/photos/Lq1rOaigDoY/download?w=1920);
     background-size: 170% auto;
