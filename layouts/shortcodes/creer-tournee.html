@@ -1,6 +1,12 @@
-<form action="#" method="GET">
-    <div class="input-group mb-5">
-        <input type="text" class="form-control" id="nouvelle-tournee" required placeholder="Indique un nom de tournée">
+<form action="#" method="GET" class="mb-5 was-validated">
+    <div class="input-group">
+        <div class="form-floating">
+            <input type="text" class="form-control" id="nouvelle-tournee" pattern="[a-z0-6]{2}[a-z0-6-]{0,}[a-z0-6]{2}" placeholder="Nom de la tournée" required>
+            <label for="tournee">Indique le nom de la tournée</label>
+        </div>
         <input type="submit" class="btn btn-dark" type="button" id="submit" value="Créer">
+    </div>
+    <div class="form-text">
+        <strong>{{ replaceRE "^https?://" "" .Site.BaseURL }}soiffard-invetere</strong>
     </div>
 </form>
