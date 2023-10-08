@@ -23,7 +23,7 @@
             </div>
         </nav>
         <main class="container-md">
-            {{ block "main" . }}{{ end }}
+            {{ block "main" . }}{{ .Content }}{{ end }}
         </main>
     </body>
   </html>
