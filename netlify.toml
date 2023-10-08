@@ -1,5 +1,5 @@
 [build]
-  command = "bash ./build.sh"
+  command = "hugo"
 
 [context.production.environment]
   HUGO_ENV = "netlify"
