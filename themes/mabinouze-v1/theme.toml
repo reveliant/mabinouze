@@ -1,0 +1,12 @@
+name = "Ma Binouze v1"
+license = "Beerware"
+licenselink = "https://github.com/reveliant/mabinouze/LICENSE"
+description = ""
+homepage = "https://mabinouze.fr/"
+tags = []
+features = []
+min_version = "0.41.0"
+
+[author]
+  name = "Rémi Dubois"
+  homepage = "https://rdubois.fr"

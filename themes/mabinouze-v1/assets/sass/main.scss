@@ -1,0 +1,54 @@
+@import 'bootstrap/functions';
+@import 'bootstrap/variables';
+$warning: $orange;
+
+@import 'bootstrap/bootstrap';
+
+body > main > .hero {
+    background-image: url(https://unsplash.com/photos/Lq1rOaigDoY/download?w=1920);
+    background-size: 170% auto;
+    background-position: 50% 100%;
+    color: $white;
+    padding: 1em;
+    text-align: center;
+    font-size: 1.15em;
+    line-height: 1.2;
+    font-weight: 400;
+
+    @include media-breakpoint-up('sm') {
+        font-size: 1.75em;
+    }
+}
+
+body > main > .photos {
+    display: grid;
+    --columns: 2;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    gap: .5em;
+
+    @include media-breakpoint-up('sm') {
+        --columns: 4;
+        gap: 1em;
+    }
+
+    & > img  {
+        width: 100%;
+    }
+}
+
+body > footer {
+    background-image: url(https://unsplash.com/photos/Lq1rOaigDoY/download?w=1920);
+    background-size: 240% auto;
+    background-position: 50% 100%;
+    color: $black;
+
+    @include media-breakpoint-up('xs') {
+        background-size: 210% auto;
+    }
+    @include media-breakpoint-up('sm') {
+        background-size: 100% auto;
+    }
+}
+body > footer > .footer-background {
+    backdrop-filter: blur(1.25px);
+}

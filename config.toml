@@ -1,6 +1,16 @@
 baseURL = "http://mabinouze.fr/"
 languageCode = "fr-fr"
-title = "Ma binouze 🍺"
+title = "Ma binouze"
 enableInlineShortcodes = true
 disableKinds = ['taxonomy', 'term', 'RSS']
 theme = "mabinouze-v1"
+
+[params]
+icon = "🍺"
+
+[markup.goldmark.renderer]
+unsafe = true
+
+[markup.goldmark.parser.attribute]
+block = true
+title = true
