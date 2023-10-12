@@ -12,5 +12,5 @@ description: Organise ta tournée avec <b>Ma binouze</b> et centralise facilemen
     <img class="rounded" src="https://unsplash.com/photos/_8KV86shhPo/download?w=640" />
 </div>
 
-## C'est moi qui régale 💶,<br class="d-sm-none"/> créer une tournée 🍻
+## C'est moi le patron 👑💶,<br class="d-sm-none"/> créer une tournée 🍻
 {{< creer-tournee >}}
