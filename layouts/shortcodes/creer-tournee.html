@@ -1,12 +1,31 @@
-<form action="#" method="GET" class="mb-5 was-validated">
-    <div class="input-group">
-        <div class="form-floating">
-            <input type="text" class="form-control" id="nouvelle-tournee" pattern="[a-z0-6]{2}[a-z0-6-]{0,}[a-z0-6]{2}" placeholder="Nom de la tournée" required>
-            <label for="tournee">Indique le nom de la tournée</label>
+<form action="#" method="GET" id="creer-tournee" class="mb-5">
+    <div class="form-floating">
+        <input type="text" class="form-control" id="nouvelle-tournee" pattern="\S{4,}" placeholder="Nom de la tournée" required v-model.trim="tournee">
+        <label for="tournee">Indique le nom de la tournée (au moins 4 caractères)</label>
+    </div>
+    <template v-if="details">
+        <div class="row mt-3">
+            <div class="col-md-10">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="description-tournee" placeholder="Description de la tournée" v-model="description">
+                    <label for="description-tournee">Description de la tournée</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-floating">
+                    <input type="time" class="form-control" id="heure-tournee" placeholder="Heure de la tournée" v-model="heure">
+                    <label for="heure-tournee">Heure de la tournée</label>
+                </div>
+            </div>
         </div>
-        <input type="submit" class="btn btn-dark" type="button" id="submit" value="Créer">
-    </div>
-    <div class="form-text">
-        <strong>{{ replaceRE "^https?://" "" .Site.BaseURL }}soiffard-invetere</strong>
-    </div>
+        <div class="input-group mt-3">
+            <div class="form-floating">
+                <input type="password" class="form-control" id="secret-tournee" placeholder="Mot de passe" required v-model="secret">
+                <label for="secret-tournee">Mot de passe</label>
+            </div>
+            <input type="submit" class="btn btn-warning" type="button" id="submit" value="Créer la tournée">
+        </div>
+        <div class="form-text mt-3">Le lien à communiquer aux assoifés est <strong>{{ replaceRE "^https?://" "" .Site.BaseURL }}{ tournee }</strong></div>
+        <div class="form-text mt-3">Les consommations à commander seront disponibles jusqu'à <strong>{ heure }</strong></div>
+    </template>
 </form>
