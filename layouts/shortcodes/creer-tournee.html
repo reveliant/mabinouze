@@ -1,8 +1,9 @@
 <form action="#" method="GET" id="creer-tournee" class="mb-5">
     <div class="form-floating">
-        <input type="text" class="form-control" id="nouvelle-tournee" pattern="\S{4,}" placeholder="Nom de la tournée" required v-model.trim="tournee">
-        <label for="tournee">Indique le nom de la tournée (au moins 4 caractères)</label>
+        <input type="text" class="form-control" id="nouvelle-tournee" pattern="[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}" minlength="4" maxlength="255" placeholder="Nom de la tournée" required v-model.trim="tournee">
+        <label for="tournee">Indique le nom de la tournée</label>
     </div>
+    <div class="form-text">Le nom de la tournée doit faire au moins 4 caractères (chiffres ou lettres non accentuées, tiret possible à partir du 5<sup>è</sup> caractère)</div>
     <template v-if="details">
         <div class="row mt-3">
             <div class="col-md-10">

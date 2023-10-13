@@ -13,7 +13,7 @@ window.addEventListener('load', function(){
       tournee(value){
         // binding this to the data value in the email input
         this.tournee = value;
-        this.details = value.match(/\S{4,}/);
+        this.details = value.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/);
       }
     },
   }).mount('#creer-tournee');
