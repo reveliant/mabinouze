@@ -82,7 +82,7 @@ export default {
                 </div>
                 <div class="alert alert-primary mt-3">
                     Le lien à communiquer aux assoifés est
-                    <a href="/{{ id }}" class="fw-bold">{{ hostname }}/{{ id }}</a><br/>
+                    <a :href="'/' + id" class="fw-bold">{{ hostname }}/{{ id }}</a><br/>
                     Les données seront conservées jusqu'à
                     <strong>{{ dateUntil }}</strong>
                 </div>
