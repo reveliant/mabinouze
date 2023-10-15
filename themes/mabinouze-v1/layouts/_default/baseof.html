@@ -17,9 +17,10 @@
         <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
         {{- end }}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        {{- /* <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js" integrity="sha512-Wbf9QOX8TxnLykSrNGmAc5mDntbpyXjOw9zgnKql3DgQ7Iyr5TCSPWpvpwDuo+jikYoSNMD9tRRH854VfPpL9A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> */}}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js" integrity="sha512-39BSQXI5q1XlvVhLfFRidKG8KM6Tr6VS/XSnNo6N/A0ZXexHCeoUI/s+ulujQy3UREjoLNrMnFat8VI0mMugWA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        {{- with resources.Get "js/main.js" | js.Build (dict "minify" "true") | resources.Fingerprint "sha512" }}
+        {{- if hugo.IsProduction }}
+        <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.esm-browser.min.js" integrity="sha512-copxJKD/NFVXucbANMyvfhxkHOvcjZP6nLxCLCOZwrkxCif/l0C65OwLm8Ca9TOCnTnzRJE4UiiU+/snx9nS3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        {{- end }}
+        {{- with resources.Get "js/main.js" | js.Build (dict "minify" "true" "params" (dict "baseURL" site.BaseURL "api" site.Params.api) "shims" (dict "vue" "vendors/vue.esm-browser.min.js" "axios" "vendors/axios.js" "moment" "vendors/moment-with-locales.min.js")) | resources.Fingerprint "sha512" }}
         <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
         {{- end }}
     </head>

@@ -3,7 +3,8 @@ title: Ma binouze 🍺
 description: Organise ta tournée avec <b>Ma binouze</b> et centralise facilement les commandes !
 ---
 ## J'ai soif, rejoindre une tournée <span class="d-none d-sm-inline">🍻</span>
-{{< tournee >}}
+
+<search-round></search-round>
 
 <div class="photos mb-5">
     <img class="rounded" src="https://unsplash.com/photos/snnhGYNqm44/download?w=640" />
@@ -13,4 +14,5 @@ description: Organise ta tournée avec <b>Ma binouze</b> et centralise facilemen
 </div>
 
 ## C'est moi le patron 👑💶,<br class="d-sm-none"/> créer une tournée 🍻
-{{< creer-tournee >}}
+
+<new-round><new-round/>
