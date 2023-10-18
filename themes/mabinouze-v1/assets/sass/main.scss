@@ -1,10 +1,14 @@
-
 $primary: #f6aa0a;
 
 @import 'bootstrap/bootstrap';
 
 .small-caps {
     font-variant: small-caps;
+}
+
+blockquote {
+    border-left: 4px solid var(--bs-primary-border-subtle);
+    padding-left: .5em;
 }
 
 body > main > .hero {
@@ -54,4 +58,39 @@ body > footer {
 }
 body > footer > .footer-background {
     backdrop-filter: blur(1.25px);
+}
+
+.calendar {
+    --calendar-color: var(--bs-danger);
+    --calendar-text: #fff;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    border: 2px solid var(--calendar-color);
+    border-radius: var(--bs-border-radius);
+    font-size: 1rem;
+
+    &-day {
+        padding: .5ex 1ex;
+        color: var(--calendar-text);
+        background-color: var(--calendar-color);
+        border-top-left-radius: calc(.5*var(--bs-border-radius));
+        border-top-right-radius: calc(.5*var(--bs-border-radius));
+    }
+    &-time {
+        padding: .5ex 1ex;
+        color: var(--calendar-color);
+        font-size: 1.75em;
+    }
+}
+
+.list-group-item-add {
+    @include media-breakpoint-up('md') {
+        visibility: hidden;
+    }
+
+    .list-group-item:hover & {
+        visibility: visible;
+    }
 }
