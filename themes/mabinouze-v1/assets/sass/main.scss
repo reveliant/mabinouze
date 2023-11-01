@@ -86,6 +86,10 @@ body > footer > .footer-background {
 }
 
 .list-group-item-add {
+    &.btn-success {
+        cursor: copy !important;
+    }
+
     @include media-breakpoint-up('md') {
         visibility: hidden;
     }
