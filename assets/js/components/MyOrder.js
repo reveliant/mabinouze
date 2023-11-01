@@ -44,6 +44,10 @@ export default {
         username(value) {
             this.username = value;
             localStorage.setItem("username", value)
+        },
+        password: async function(value) {
+            this.password = value;
+            this.digest = "DUMMY";
         }
     },
     computed: {
