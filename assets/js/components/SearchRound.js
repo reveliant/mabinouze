@@ -12,7 +12,6 @@ export default {
       }
     },
     methods: {
-        moment: moment,
         submit(event) {
             event.preventDefault();
             if (this.found) {

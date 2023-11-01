@@ -13,9 +13,8 @@ export default {
     mounted() {
         let now = moment();
         let time = moment(this.date);
-        this.day = time.isSame(now, 'date') ? "aujourd'hui" : time.format('dddd')
-        this.time =  time.format('LT')
-        console.log("setup", this.date);
+        this.day = time.isSame(now, 'date') ? "aujourd'hui" : time.format('dddd');
+        this.time =  time.format('LT');
     },
     template: `
         <div class="calendar">

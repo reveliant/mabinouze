@@ -17,8 +17,8 @@ export default {
             let now = moment();
             let time = moment(this.time, 'HH:mm');
             if (time.isBefore(now)) {
+                // Time in past
                 time.add(1, 'd');
-                console.log("time in past", time.toISOString());
             }
             return time;
         },
