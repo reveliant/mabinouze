@@ -20,7 +20,7 @@
         {{- if hugo.IsProduction }}
         <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.esm-browser.min.js" integrity="sha512-copxJKD/NFVXucbANMyvfhxkHOvcjZP6nLxCLCOZwrkxCif/l0C65OwLm8Ca9TOCnTnzRJE4UiiU+/snx9nS3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         {{- end }}
-        {{- with resources.Get "js/main.js" | js.Build (dict "minify" "true" "params" (dict "baseURL" site.BaseURL "api" site.Params.api) "shims" (dict "vue" "vendors/vue.esm-browser.min.js" "axios" "vendors/axios.js" "moment" "vendors/moment-with-locales.min.js")) | resources.Fingerprint "sha512" }}
+        {{- with resources.Get "js/main.js" | js.Build (dict "minify" "true" "params" (dict "baseURL" site.BaseURL "api" site.Params.api) "shims" (dict "vue" "vendors/vue.esm-browser.min.js" "axios" "vendors/axios.js" "moment" "vendors/moment-with-locales.min.js" "mitt" "vendors/mitt.min.js")) | resources.Fingerprint "sha512" }}
         <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
         {{- end }}
     </head>

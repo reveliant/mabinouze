@@ -47,10 +47,9 @@ export default {
                 <li v-for="drink in drinks" class="list-group-item d-flex justify-content-between align-items-center">
                     <span class="flex-fill">{{ drink.name }}</span>
                     <span class="badge bg-danger rounded-pill" v-if="drink.quantity > 1">{{ drink.quantity }}</span>
-                    <button class="list-group-item-add btn btn-success badge ms-3">+</button>
+                    <button class="list-group-item-add btn btn-success badge ms-3" @click="this.emitter.emit('addToOrder', drink.name)">+</button>
                 </li>
             </ul>
-            <h3>Ma commande</h3>
         </article>
         <div v-else>
             <h2>Oups !</h2>
