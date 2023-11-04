@@ -28,3 +28,8 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), microphone=()"
+
+[[redirects]]
+  from = "/:id/details"
+  to = "/details/"
+  status = 200

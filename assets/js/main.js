@@ -7,7 +7,7 @@
 import {ref, createApp} from 'vue';
 import moment from 'moment';
 import mitt from 'mitt';
-import {NewRound, SearchRound, Round, MyOrder} from './components';
+import {NewRound, SearchRound, Round, RoundDetails, MyOrder} from './components';
 
 /*const routes = {
   '/': Home,
@@ -28,7 +28,8 @@ window.addEventListener('load', function(){
         .component('NewRound', NewRound)
         .component('SearchRound', SearchRound)
         .component('Round', Round)
+        .component('RoundDetails', RoundDetails)
         .component('MyOrder', MyOrder);
       app.config.globalProperties.emitter = mitt();
-      app.mount('body > main');
+      app.mount('body');
 });
