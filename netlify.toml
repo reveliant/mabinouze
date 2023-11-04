@@ -30,6 +30,11 @@
     Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), microphone=()"
 
 [[redirects]]
+  from = "/:id"
+  to = "/round/"
+  status = 200
+
+[[redirects]]
   from = "/:id/details"
   to = "/details/"
   status = 200

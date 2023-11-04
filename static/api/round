@@ -20,34 +20,5 @@
             "quantity": 2
         }
     ],
-    "tipplers": [
-        {
-            "name": "Joe",
-            "drinks": [
-                "Blonde",
-                "Coca-Cola"
-            ]
-        },
-        {
-            "name": "Jack",
-            "drinks": [
-                "Blonde",
-                "Ambrée"
-            ]
-        },
-        {
-            "name": "William",
-            "drinks": [
-                "Blonde",
-                "Ambrée"
-            ]
-        },
-        {
-            "name": "Averell",
-            "drinks": [
-                "Bière d'automne",
-                "Coca-Cola"
-            ]
-        }
-    ]
+    "tipplers": 4
 }
