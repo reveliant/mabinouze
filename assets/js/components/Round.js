@@ -51,6 +51,7 @@ export default {
                 </li>
             </ul>
             <p class="text-end">Total : {{ total.drinks }} consommations pour {{ total.tipplers }} assoifés</p>
+            <p class="text-end"><a :href="'/' + id + '/details'" class="btn btn-primary">Voir le détail de la commande</a></p>
         </article>
         <div v-else>
             <h2>Oups !</h2>
