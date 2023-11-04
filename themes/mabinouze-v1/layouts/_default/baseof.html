@@ -25,19 +25,30 @@
         {{- end }}
     </head>
     <body class="h-100 d-flex flex-column">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar bg-dark" data-bs-theme="dark">
             <div class="container-fluid">
                 <a class="navbar-brand me-auto" href="{{ .Site.Home.RelPermalink }}">
                     {{ .Site.Title }}
                     <span class="d-none d-lg-inline">{{ .Site.Params.icon }}</span>
                 </a>
-                <button class="d-lg-none btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-labelledby="settings-label" aria-expanded="false" aria-label="Afficher les paramètres">
                     {{ .Site.Params.icon }}
-                </button>              
-                <div class="collapse navbar-collapse" id="navbar-menu"></div>
+                </button>
             </div>
         </nav>
-        <main class="container-md flex-fill mt-4" id="main">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="navbar-menu">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="settings-label">Paramètres</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <form class="d-flex mt-3" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>              
+        <main class="container-md flex-fill mt-4">
             {{ block "main" . }}{{ .Content }}{{ end }}
         </main>
         <footer class="bg-warning">
