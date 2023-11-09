@@ -1,0 +1,29 @@
+DROP TABLE IF EXISTS rounds;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS drinks;
+
+CREATE TABLE rounds (
+  round_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT UNIQUE NOT NULL,
+  description TEXT NOT NULL,
+  time TEXT NOT NULL,
+  expires TEXT NOT NULL,
+  password TEXT NOT NULL DEFAULT('0000'),
+  locked BOOLEAN NOT NULL DEFAULT 0
+);
+
+CREATE TABLE orders (
+  order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  round_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  password TEXT NOT NULL DEFAULT('0000'),
+  FOREIGN KEY (round_id) REFERENCES rounds (round_id)
+);
+
+CREATE TABLE drinks (
+  drink_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  order_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  quantity INTEGER NOT NULL,
+  FOREIGN KEY (order_id) REFERENCES orders (order_id)
+);

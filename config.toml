@@ -8,7 +8,7 @@ theme = "mabinouze-v1"
 [params]
 icon = "🍺"
 repository = "https://github.com/reveliant/mabinouze"
-api = "/api/"
+api = "https://api.mabinouze.fr/v1"
 
 [markup.goldmark.renderer]
 unsafe = true
