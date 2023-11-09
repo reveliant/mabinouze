@@ -21,7 +21,7 @@ export default {
     },
     methods: {
         update(event) {
-            axios.get(params.api + 'round?id=' + this.id).then((response) => {
+            axios.get(this.urls.getRound.replace('<id>', this.id)).then((response) => {
                 this.description = response.data.description;
                 this.time = response.data.time;
                 this.drinks = response.data.drinks;

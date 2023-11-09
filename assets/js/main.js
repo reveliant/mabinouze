@@ -8,6 +8,13 @@ import {ref, createApp} from 'vue';
 import moment from 'moment';
 import mitt from 'mitt';
 import {NewRound, SearchRound, Round, RoundDetails, MyOrder} from './components';
+import params from '@params';
+
+const URLs = {
+  'getRound': params.api + '/<id>',
+  'postRound': params.api + '/',
+  'getRoundDetails': params.api + '/<id>/details'
+}
 
 /*const routes = {
   '/': Home,
@@ -31,5 +38,6 @@ window.addEventListener('load', function(){
         .component('RoundDetails', RoundDetails)
         .component('MyOrder', MyOrder);
       app.config.globalProperties.emitter = mitt();
+      app.config.globalProperties.urls = URLs;
       app.mount('body');
 });

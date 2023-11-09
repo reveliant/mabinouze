@@ -1,6 +1,5 @@
 import axios from 'axios';
 import moment from 'moment';
-import params from '@params';
 
 export default {
     data() {
@@ -33,7 +32,7 @@ export default {
         submit(target) {
             target.preventDefault();
             if (this.valid) {
-                axios.post(params.api + '/round', {
+                axios.post(this.urls.newRound, {
                     id: this.id,
                     description: this.description,
                     time: this.roundTime.toISOString(),

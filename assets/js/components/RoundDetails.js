@@ -17,7 +17,7 @@ export default {
     },
     methods: {
         update(event) {
-            axios.get(params.api + 'details?id=' + this.id).then((response) => {
+            axios.get(this.urls.getRoundDetails.replace('<id>', this.id)).then((response) => {
                 this.description = response.data.description;
                 this.time = response.data.time;
                 this.tipplers = response.data.tipplers;

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import moment from 'moment';
-import params from '@params';
 
 export default {
     data() {
@@ -23,7 +22,7 @@ export default {
         id(value){
             this.id = value;
             if (value.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/)) {
-                axios.get(params.api + 'round?id=' + this.id).then((response) => {
+                axios.get(this.urls.getRound.replace('<id>', this.id)).then((response) => {
                     this.description = response.data.description;
                     let now = moment();
                     let time = moment(response.data.time);
