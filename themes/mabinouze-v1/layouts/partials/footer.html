@@ -1,0 +1,10 @@
+<p>
+    <strong>{{ .Site.Title }}</strong> est un outil <a class="link-body-emphasis" href="{{ .Site.Params.repository }}">libre et gratuit</a>.
+    {{ with .Site.GetPage "/legal" }}<a class="link-body-emphasis fw-light" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+</p>
+<p class="fw-light">
+    L'abus d'alcool est dangereux pour la santé.
+    À consommer avec modération.
+    <img class="icon" src="/alcool-mineur.svg" />
+    <img class="icon" src="/alcool-grossesse.svg" />
+</p>

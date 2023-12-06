@@ -54,11 +54,7 @@
         <footer class="bg-warning">
             <div class="pt-4 pt-md-5 pb-2 pb-md-3 footer-background">
                 <div class="container-md">
-                    <p>
-                        <strong>{{ .Site.Title }}</strong> est un outil <a class="link-body-emphasis" href="{{ .Site.Params.repository }}">libre et gratuit</a>.
-                        {{ with .Site.GetPage "/legal" }}<a class="link-body-emphasis fw-light" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
-                    </p>
-                    <p class="fw-light">L'abus d'alcool est dangereux pour la santé. À consommer avec modération</p>
+                    {{ partial "footer" . }}
                 </div>
             </div>
         </footer>
