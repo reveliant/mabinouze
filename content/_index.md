@@ -7,14 +7,14 @@ description: Organise ta tournée avec <b>Ma binouze</b> et centralise facilemen
 <search-round></search-round>
 
 <div class="photos mb-5">
-    <img class="rounded" src="https://unsplash.com/photos/snnhGYNqm44/download?w=640" />
-    <img class="rounded" src="https://unsplash.com/photos/AgJdd_HgFPw/download?w=640" />
-    <img class="rounded" src="https://unsplash.com/photos/6VhPY27jdps/download?w=640" />
-    <img class="rounded" src="https://unsplash.com/photos/7EbGkOm8pWM/download?w=640" />
-    <img class="rounded" src="https://unsplash.com/photos/_8KV86shhPo/download?w=640" />
-    <img class="rounded" src="https://unsplash.com/photos/UErWoQEoMrc/download?w=640" />
-    <img class="rounded" src="https://unsplash.com/photos/NmvMhov1sYc/download?w=640" />
-    <img class="rounded" src="https://unsplash.com/photos/FV27_pbpWk0/download?w=640" />
+    <img class="rounded" src="/unsplash/snnhGYNqm44.jpeg" />
+    <img class="rounded" src="/unsplash/AgJdd_HgFPw.jpeg" />
+    <img class="rounded" src="/unsplash/6VhPY27jdps.jpeg" />
+    <img class="rounded" src="/unsplash/7EbGkOm8pWM.jpeg" />
+    <img class="rounded" src="/unsplash/_8KV86shhPo.jpeg" />
+    <img class="rounded" src="/unsplash/UErWoQEoMrc.jpeg" />
+    <img class="rounded" src="/unsplash/NmvMhov1sYc.jpeg" />
+    <img class="rounded" src="/unsplash/FV27_pbpWk0.jpeg" />
 </div>
 
 ## C'est moi le patron 👑💶,<br class="d-sm-none"/> créer une tournée 🍻
