@@ -3,18 +3,18 @@ title: Mentions légales
 ---
 ## Cadre légal
 
-Cette application est un service de communication au public en ligne édité à titre non professionnel au sens de l’[article 6, III, 2° de la loi 2004-575 du 21 juin 2004](http://legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000028345121&cidTexte=LEGITEXT000005789847)
+Cette application est un service de communication au public en ligne édité à titre non professionnel au sens de l’[article 6, III, 2° de la loi 2004-575 du 21 juin 2004](http://legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000028345121&cidTexte=LEGITEXT000005789847).
 Conformément aux dispositions de cet article, son éditeur a choisi de rester anonyme.
 
 ## Hébergeurs
 
-- L'interface graphique (« UI »), qui ne stocke aucune donnée fournie par l'utilisateur, est héberée par :
+- L'interface graphique (« UI »), qui ne stocke aucune donnée fournie par l'utilisateur, est hébergée par :
 
   > [Netlify, Inc.](https://www.netlify.com/), 2325 3rd Street, Suite 215, San Francisco, California 94107, États-Unis d’Amérique
 
-- L'interface de données (« API »), qui traite les données fournies par l'utilisateur, est hébergée par :
+- L'interface de données (« API »), qui traite et stocke les données fournies par l'utilisateur, est hébergée sur un serveur de :
 
-  > [OVH SAS](https://www.ovh.com/fr/), 2 rue Kellermann, 59100 Roubaix, France ([coordonnées complètes](https://www.ovh.com/fr/support/mentions-legales/))
+  > [IONOS SARL](https://ionos.fr/), 7 place de la Gare, BP 70109, 57200 Sarreguemines Cedex, France
 
 Tout deux disposent des éléments d'identification personnelle de l'éditeur du site.
 
@@ -22,10 +22,15 @@ Tout deux disposent des éléments d'identification personnelle de l'éditeur du
 
 La loi vous permet de vous adresser directement à l’hébergeur :
 
-- pour Netlify, par [courriel](mailto:fraud@netlify.com?subject=Abuse%20report&body=Please%20include%20the%20site%20URL%20and%20reason%20for%20your%20report%2C%20and%20we%20will%20reply%20promptly.)
+- pour Netlify, par courriel à [fraud@netlify.com](mailto:fraud@netlify.com?subject=Abuse%20report&body=Please%20include%20the%20site%20URL%20and%20reason%20for%20your%20report%2C%20and%20we%20will%20reply%20promptly.) en précisant :
+  - l'adresse du site ou de la page depuis laquelle le contenu est accessible ;
+  - le contenu considéré comme illicite.
 
-- pour OVH, par courrier adressé à :
-  > OVH SAS, Service juridique, 2 rue Kellermann, 59100 Roubaix, France.
+- pour IONOS, par courriel à [litiges@ionos.fr](mailto:litiges@ionos.fr?subject=Signalement%20d'%20un%20contenu%20illicite) en précisant :
+  - l'adresse du site ou de la page depuis laquelle le contenu est accessible ;
+  - le contenu considéré comme illicite ;
+  - la date à laquelle vous avez découvert le contenu considéré comme illicite ;
+  - votre identité (nom et coordonnées complètes).
 
 Dans ce cas, l’article 6, I, 4° de la loi 2004-575 du 21 juin 2004 prévoit cependant :
 
@@ -33,9 +38,19 @@ Dans ce cas, l’article 6, I, 4° de la loi 2004-575 du 21 juin 2004 prévoit c
 
 ## Traitement de données à caractère personnel
 
-Cette application ne traite que les données fournies volontairement et directement par l'utilisateur, nécessaires à l'exécution du contrat tacite entre l'éditeur de l'application, l'organisateur d'une tournée et les participants, au sein de l'article , 1.b) du [Règlement (UE) 2016/679](http://data.europa.eu/eli/reg/2016/679/oj) du Parlement européen et du Conseil du 27 avril 2016 (règlement général sur la protection des données).
+Cette application ne traite que les données fournies volontairement et directement par l'utilisateur, nécessaires à l'exécution du contrat tacite entre l'éditeur de l'application, l'organisateur d'une tournée et les participants, au sein de l'[article 6](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32016R0679#d1e1937-1-1), 1.b) du [Règlement (UE) 2016/679](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32016R0679) du Parlement européen et du Conseil du 27 avril 2016 (règlement général sur la protection des données), et aux fins exclusives de l'organisation des tournées :
 
-Les données sont supprimées 6 heures après l'horaire initial de chaque tournée (cet horaire devant lui-même être dans les 6 heures après l'heure courante, les données sont donc conservées au maximum 12 heures).
+- tournées : nom, description, horaire, expiration de la tournée, mot de passe d'organisation, mot de passe éventuel de participation ;
+- participants : tournée associée, nom du participant, mot de passe ;
+- consommations : partiticpant associé, nom de la consommation, quantité.
+
+Ces données sont supprimées à l'expiration de chaque tournée, 6 heures après l'horaire initial de la tournée.\
+L'horaire initial devant être dans les 6 heures après l'heure courante, les données sont ainsi conservées un maximum de 12 heures.
+
+Certaines tournées peuvent être « réservées » manuellement par les administrateurs.\
+Dans ce cas, les caractéristiques de la tournée, à l'exception des participants et consommations, sont conservées sans limite de temps.
+
+L'ensemble des mots de passe est traité par un procédé cryptographique (algorithme de dérivation de clé) non inversible, qui empèche un attaquant de prendre connaissance des mots de passe utilisés même en cas d'éventuelle fuite des données conservées.
 
 ## Crédits photographiques
 
