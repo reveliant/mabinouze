@@ -1,4 +1,5 @@
 $primary: #f6aa0a;
+$primary-img: url(/unsplash/Lq1rOaigDoY-reduce.jpeg);
 
 @import 'bootstrap/bootstrap';
 
@@ -12,7 +13,7 @@ blockquote {
 }
 
 body > main > .hero {
-    background-image: url(/unsplash/Lq1rOaigDoY-reduced.jpeg);
+    background-image: $primary-img;
     background-size: 170% auto;
     background-position: 50% 100%;
     color: $white;
@@ -44,7 +45,7 @@ body > main > .photos {
 }
 
 body > footer {
-    background-image: url(/unsplash/Lq1rOaigDoY-reduced.jpeg);
+    background-image: $primary-img;
     background-size: 240% auto;
     background-position: 50% 100%;
     color: $black;
