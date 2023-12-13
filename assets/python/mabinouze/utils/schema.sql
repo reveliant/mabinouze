@@ -8,7 +8,8 @@ CREATE TABLE rounds (
   description TEXT NOT NULL,
   time TEXT NOT NULL,
   expires TEXT NOT NULL,
-  password TEXT NOT NULL DEFAULT('0000'),
+  password TEXT NOT NULL,
+  access_token TEXT NULL,
   locked BOOLEAN NOT NULL DEFAULT 0
 );
 
@@ -16,8 +17,9 @@ CREATE TABLE orders (
   order_id INTEGER PRIMARY KEY AUTOINCREMENT,
   round_id INTEGER NOT NULL,
   name TEXT NOT NULL,
-  password TEXT NOT NULL DEFAULT('0000'),
-  FOREIGN KEY (round_id) REFERENCES rounds (round_id)
+  password TEXT NOT NULL DEFAULT(''),
+  FOREIGN KEY (round_id) REFERENCES rounds (round_id),
+  UNIQUE(round_id, name)
 );
 
 CREATE TABLE drinks (
@@ -25,5 +27,6 @@ CREATE TABLE drinks (
   order_id INTEGER NOT NULL,
   name TEXT NOT NULL,
   quantity INTEGER NOT NULL,
-  FOREIGN KEY (order_id) REFERENCES orders (order_id)
+  FOREIGN KEY (order_id) REFERENCES orders (order_id),
+  UNIQUE(order_id, name)
 );
