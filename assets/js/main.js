@@ -11,9 +11,11 @@ import {NewRound, SearchRound, Round, RoundDetails, MyOrder} from './components'
 import params from '@params';
 
 const URLs = {
-  'getRound': params.api + '/<id>',
-  'postRound': params.api + '/',
-  'getRoundDetails': params.api + '/<id>/details'
+  'getRound': params.api + '/search/<id>',
+  'getRoundDetails': params.api + '/search/<id>/details',
+  'round': params.api + '/round',
+  'order': params.api + '/order',
+  'drink': params.api + '/drinks',
 }
 
 /*const routes = {

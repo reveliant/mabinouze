@@ -1,5 +1,4 @@
 import axios from 'axios';
-import params from '@params';
 import Calendar from './Calendar.js'
 
 export default {
@@ -17,11 +16,23 @@ export default {
     },
     methods: {
         update(event) {
-            axios.get(this.urls.getRoundDetails.replace('<id>', this.id)).then((response) => {
+            config = {};
+            access_token = sessionStorage.getItem(`admin:${this.id}`)
+            if (access_token != null) {
+                config['headers'] = {'Authorization': `Bearer ${access_token}`}
+            }
+            axios.get(this.urls.getRoundDetails.replace('<id>', this.id), config).then((response) => {
                 this.description = response.data.description;
                 this.time = response.data.time;
                 this.tipplers = response.data.tipplers;
                 this.found = true;
+            }).catch((error) => {
+                if (error.response.status == 401) {
+                    this.passwordProtected = true;
+                    document.getElementById("search-password").focus();
+                } else {
+                    this.passwordProtected = false;
+                }
             })
         },
     },

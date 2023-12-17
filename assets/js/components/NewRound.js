@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
+import params from '@params';
 
 export default {
     data() {
@@ -8,6 +9,7 @@ export default {
             description: '',
             time: moment().add(1, 'h').minutes(0).format('HH:mm'),
             password: '',
+            access_token: '',
         }
     },
     computed: {
@@ -32,11 +34,18 @@ export default {
         submit(target) {
             target.preventDefault();
             if (this.valid) {
-                axios.post(this.urls.newRound, {
+                axios.post(this.urls.round, {
                     id: this.id,
                     description: this.description,
                     time: this.roundTime.toISOString(),
                     password: this.password,
+                    access_token: (this.access_token != '') ? this.access_token : null,
+                }).then((response) => {
+                    sessionStorage.setItem(`admin:${this.id}`, btoa(this.password))
+                    if (this.access_token != '') {
+                        sessionStorage.setItem(`access:${this.id}`, btoa(this.access_token))
+                    }
+                    document.location.href = "/" + this.id + "/"
                 })
             }
         },

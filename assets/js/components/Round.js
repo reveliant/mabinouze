@@ -21,7 +21,12 @@ export default {
     },
     methods: {
         update(event) {
-            axios.get(this.urls.getRound.replace('<id>', this.id)).then((response) => {
+            config = {};
+            access_token = sessionStorage.getItem(`access:${this.id}`)
+            if (access_token != null) {
+                config['headers'] = {'Authorization': `Bearer ${access_token}`}
+            }
+            axios.get(this.urls.getRound.replace('<id>', this.id), config).then((response) => {
                 this.description = response.data.description;
                 this.time = response.data.time;
                 this.drinks = response.data.drinks;
