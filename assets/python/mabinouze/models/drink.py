@@ -1,12 +1,14 @@
 """MaBinouze Drink model"""
 
+from uuid import uuid4
+
 from ..utils import get_db
 
 class Drink:
     """MaBinouze Drink model"""
     def __init__(self, **kwargs):
-        self.__id = kwargs.get('drink_id', None)
-        self.__order_id = kwargs.get('order_id', None)
+        self.uuid = kwargs.get('drink_id', uuid4())
+        self.order_uuid = kwargs.get('order_id', None)
         self.name = kwargs.get('name', "")
         self.quantity = kwargs.get('quantity', 1)
 
@@ -16,19 +18,76 @@ class Drink:
     def __repr__(self):
         return "<Drink>{s.name} ({s.quantity})".format(s=self)
 
-    def copy(self):
-        """Return a copy of current drink"""
-        return Drink(name=self.name, quantity=self.quantity)
-
-    def to_json(self):
+    def to_json(self, without_id=False):
         """Return object as JSON-serializable dict"""
-        return {
+        obj = {
+            "id": self.uuid,
             "name": self.name,
             "quantity": self.quantity
         }
+        if without_id:
+            del obj['id']
+        return obj
+
+    #
+    # Database CRUD methods
+    #
+
+    def create(self):
+        """Create drink in database"""
+        conn = get_db()
+        conn.execute("""
+            INSERT INTO drinks(drink_id, order_id, name, quantity)
+            VALUES (?, ?, ?, ?)
+        """, (
+            uuid4(),
+            self.order_uuid,
+            self.name,
+            self.quantity
+        ))
 
     @classmethod
-    def read_order(cls, order_id):
+    def read(cls, drink_id):
+        """Read a drink from database"""
+        conn = get_db()
+        cur = conn.execute("""
+            SELECT drink_id, order_id, name, quantity
+            FROM drink
+            WHERE drink_id = ?
+        """, (drink_id, ))
+        res = cur.fetchone()
+
+        if res is None:
+            return None
+
+        return cls(**res)
+
+    def update(self):
+        """Update drink in database""" 
+        conn = get_db()
+        conn.execute("""
+            UPDATE drinks
+            SET quantity = ?
+            WHERE drink_id = ?
+        """, (
+            self.quantity,
+            self.uuid
+        ))
+
+    def delete(self):
+        """Delete drink in database""" 
+        conn = get_db()
+        conn.execute("""
+            DELETE FROM drinks
+            WHERE drink_id = ?
+        """, (self.uuid, ))
+
+    #
+    # Searches
+    #
+
+    @classmethod
+    def from_order(cls, order_id):
         """Read all drinks for a given order in database"""
         drinks = []
         conn = get_db()
@@ -41,46 +100,22 @@ class Drink:
             drinks.append(cls(**res))
         return drinks
 
-    def create(self):
-        """Create drink in database"""
-        conn = get_db()
-        conn.execute("""
-            INSERT INTO drinks(order_id, name, quantity)
-            VALUES (?, ?, ?)
-        """, (
-            self.__order_id,
-            self.name,
-            self.quantity
-        ))
+    #
+    # Specific methods
+    #
 
-    def update(self):
-        """Update drink in database""" 
-        conn = get_db()
-        conn.execute("""
-            UPDATE drinks
-            SET quantity = ?
-            WHERE drink_id = ?
-        """, (
-            self.quantity,
-            self.__id
-        ))
+    def copy(self):
+        """Return a copy of current drink"""
+        return Drink(name=self.name, quantity=self.quantity)
 
-    def delete(self):
-        """Delete drink in database""" 
-        conn = get_db()
-        conn.execute("""
-            DELETE FROM drinks
-            WHERE drink_id = ?
-        """, (self.__id,))
-
-    def increase(self):
+    def increase(self, quantity=1):
         """Increase quantity and update database"""
-        self.quantity += 1
+        self.quantity += quantity
         self.update()
 
-    def decrease(self):
+    def decrease(self, quantity=1):
         """Decrease quantity and update database"""
-        self.quantity -= 1
+        self.quantity -= quantity
         if self.quantity > 0:
             self.update()
         else:

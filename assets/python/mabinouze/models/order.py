@@ -1,13 +1,15 @@
 """MaBinouze Order model"""
 
+from uuid import uuid4
+
 from .drink import Drink
 from ..utils import get_db, crypt, verify
 
 class Order:
     """MaBinouze Order model"""
     def __init__(self, **kwargs):
-        self.__id = kwargs.get('order_id', None)
-        self.__round_id = kwargs.get('round_id', None)
+        self.uuid = kwargs.get('order_id', uuid4())
+        self.round_uuid = kwargs.get('round_id', None)
         self.tippler = kwargs.get('tippler', "")
         self.drinks = kwargs.get('drinks', []) # list of Drinks
         self.__password = kwargs['password'].encode() \
@@ -19,20 +21,86 @@ class Order:
     def __repr__(self):
         return f"<Order>{self.tippler}: {self.drinks!r}"
 
-    def to_json(self):
+    def to_json(self, with_drinks=False):
         """Return object as JSON-serializable dict"""
-        return {
-            "name": self.tippler,
-            "drinks": [drink.to_json() for drink in self.drinks]
+        obj = {
+            "id": self.uuid,
+            "name": self.tippler
         }
+        if with_drinks:
+            obj["drinks"] = [drink.to_json() for drink in self.drinks]
+        return obj
 
-    def updates(self, other):
-        """Updates self database ID from another order"""
-        # pylint: disable=protected-access
-        self.__id = other.__id
+    @property
+    def round(self):
+        """Return parent round ID"""
+        return self.round_uuid
+
+    #
+    # Databse CRUD methods
+    #
+
+    def create(self):
+        """Create order in database"""
+        conn = get_db()
+        conn.execute("""
+            INSERT INTO orders(order_id, round_id, name, password)
+            VALUES (?, ?, ?, ?)
+        """, (
+            uuid4(),
+            self.round_uuid,
+            self.tippler,
+            crypt(self.__password)
+        ))
 
     @classmethod
-    def read(cls, round_id, name):
+    def read(cls, order_id):
+        """Read an order from database"""
+        conn = get_db()
+        cur = conn.execute("""
+            SELECT round_id, order_id, name AS tippler, password
+            FROM orders
+            WHERE order_id = ?
+        """, (order_id, ))
+        res = cur.fetchone()
+
+        if res is None:
+            return None
+
+        return cls(**res)
+
+    def update(self):
+        """Update order in database"""
+        conn = get_db()
+        conn.execute("""
+            UPDATE orders
+            SET name = ?,
+                password = ?
+            WHERE order_id = ?
+        """, (
+            self.tippler,
+            crypt(self.__password),
+            self.uuid,
+        ))
+
+    def delete(self):
+        """Delete order in database"""
+        conn = get_db()
+        conn.execute("""
+            DELETE FROM drinks
+            WHERE order_id = ?
+        """, (self.uuid, ))
+        conn.execute("""
+            DELETE FROM orders
+            WHERE order_id = ?
+        """, (self.uuid, ))
+
+    #
+    # Searches
+    #
+
+    @classmethod
+    def search(cls, round_id, tippler):
         """Read an order from database"""
         conn = get_db()
         cur = conn.execute("""
@@ -40,7 +108,7 @@ class Order:
             FROM orders
             WHERE round_id = ?
             AND name = ?
-        """, (round_id, name, ))
+        """, (round_id, tippler, ))
         res = cur.fetchone()
 
         if res is None:
@@ -49,7 +117,7 @@ class Order:
         return cls(**res)
 
     @classmethod
-    def read_round(cls, round_id):
+    def from_round(cls, round_id):
         """Read all orders for a given round from database"""
         orders = []
 
@@ -65,42 +133,17 @@ class Order:
 
     def read_drinks(self):
         """Populate order with drinks"""
-        self.drinks = Drink.read_order(self.__id)
+        self.drinks = Drink.from_order(self.uuid)
         return self
 
-    def create(self):
-        """Create order in database"""
-        conn = get_db()
-        conn.execute("""
-            INSERT INTO orders(round_id, name, password)
-            VALUES (?, ?, ?)
-        """, (
-            self.__round_id,
-            self.tippler,
-            crypt(self.__password)
-        ))
+    #
+    # Specific methods
+    #
 
-    def update(self):
-        """Update order in database"""
-        conn = get_db()
-        conn.execute("""
-            UPDATE orders
-            SET name = ?,
-                password = ?
-            WHERE order_id = ?
-        """, (
-            self.tippler,
-            crypt(self.__password),
-            self.__id,
-        ))
-
-    def delete(self):
-        """Delete order in database"""
-        conn = get_db()
-        conn.execute("""
-            DELETE FROM orders
-            WHERE order_id = ?
-        """, (self.__id,))
+    def copy_id(self, other):
+        """Updates self database ID from another order"""
+        # pylint: disable=protected-access
+        self.uuid = other.uuid
 
     def verify_password(self, token):
         """Verify a tippler password"""

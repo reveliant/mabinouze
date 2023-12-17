@@ -5,7 +5,7 @@ import click
 
 from flask import current_app, g
 
-__ALL__ = ['get_db', 'close_db', 'init_db', 'init_db_command']
+__ALL__ = ['get_db', 'close_db', 'init_db', 'clean_db']
 
 def get_db():
     """Get database connector"""
@@ -25,15 +25,47 @@ def close_db():
     if database is not None:
         database.close()
 
-def init_db():
-    """Initialize database"""
-    database = get_db()
-
-    with current_app.open_resource('utils/schema.sql') as sql:
-        database.executescript(sql.read().decode('utf8'))
-
 @click.command('init-db')
-def init_db_command():
+def init_db():
     """Clear the existing data and create new tables."""
-    init_db()
-    click.echo('Initialized the database.')
+    conn = get_db()
+    with current_app.open_resource('utils/schema.sql') as sql:
+        conn.executescript(sql.read().decode('utf8'))
+
+    click.echo('Initialized database.')
+
+
+@click.command('clean-db')
+def clean_db():
+    """Clear expired data."""
+    conn = get_db()
+    conn.executescript("""
+        CREATE TEMPORARY TABLE expired_rounds
+        AS SELECT round_id, locked
+        FROM rounds
+        WHERE rounds.expires < datetime('now');
+
+        DELETE FROM drinks
+        WHERE order_id IN (
+            SELECT order_id
+            FROM orders, expired_rounds
+            WHERE orders.round_id = expired_rounds.round_id
+        );
+
+        DELETE FROM orders
+        WHERE round_id IN (
+            SELECT round_id
+            FROM expired_rounds
+        );
+
+        DELETE FROM rounds
+        WHERE round_id IN (
+            SELECT round_id
+            FROM expired_rounds
+            WHERE locked IS NOT TRUE
+        );
+
+        DROP TABLE expired_rounds;
+    """)
+
+    click.echo('Cleaned database from expired data.')
