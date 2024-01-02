@@ -59,7 +59,7 @@ class Round:
             INSERT INTO rounds(round_id, name, description, time, expires, password, access_token, locked)
             VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)
         """, (
-            uuid4(),
+            str(self.uuid),
             self.name,
             self.description,
             self.times['round'].isoformat(timespec='minutes'),
@@ -76,7 +76,9 @@ class Round:
             SELECT round_id, name, description, time, expires, password, access_token
             FROM rounds
             WHERE round_id = ?
-        """, (round_id,))
+        """, (
+            str(round_id),
+        ))
         res = cur.fetchone()
 
         if res is None:
@@ -107,7 +109,7 @@ class Round:
             expires,
             crypt(self.__passwords['organizer']),
             crypt(self.__passwords['access']),
-            self.uuid
+            str(self.uuid)
         ))
 
     #
@@ -122,7 +124,9 @@ class Round:
             SELECT round_id, name, description, time, expires, password, access_token
             FROM rounds
             WHERE name = ?
-        """, (name,))
+        """, (
+            name,
+        ))
         res = cur.fetchone()
 
         if res is None:
@@ -137,7 +141,9 @@ class Round:
             SELECT round_id
             FROM rounds
             WHERE name = ?
-        """, (self.name, ))
+        """, (
+            self.name,
+        ))
 
         return cur.fetchone() is not None
 

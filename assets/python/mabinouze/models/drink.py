@@ -40,8 +40,8 @@ class Drink:
             INSERT INTO drinks(drink_id, order_id, name, quantity)
             VALUES (?, ?, ?, ?)
         """, (
-            uuid4(),
-            self.order_uuid,
+            str(self.uuid),
+            str(self.order_uuid),
             self.name,
             self.quantity
         ))
@@ -52,9 +52,11 @@ class Drink:
         conn = get_db()
         cur = conn.execute("""
             SELECT drink_id, order_id, name, quantity
-            FROM drink
+            FROM drinks
             WHERE drink_id = ?
-        """, (drink_id, ))
+        """, (
+            str(drink_id),
+        ))
         res = cur.fetchone()
 
         if res is None:
@@ -71,7 +73,7 @@ class Drink:
             WHERE drink_id = ?
         """, (
             self.quantity,
-            self.uuid
+            str(self.uuid)
         ))
 
     def delete(self):
@@ -80,7 +82,9 @@ class Drink:
         conn.execute("""
             DELETE FROM drinks
             WHERE drink_id = ?
-        """, (self.uuid, ))
+        """, (
+            str(self.uuid),
+        ))
 
     #
     # Searches
@@ -95,7 +99,9 @@ class Drink:
             SELECT drink_id, order_id, name, quantity
             FROM drinks
             WHERE order_id = ?
-        """, (order_id, ))
+        """, (
+            str(order_id),
+        ))
         for res in cur.fetchall():
             drinks.append(cls(**res))
         return drinks

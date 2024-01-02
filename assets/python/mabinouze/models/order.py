@@ -47,8 +47,8 @@ class Order:
             INSERT INTO orders(order_id, round_id, name, password)
             VALUES (?, ?, ?, ?)
         """, (
-            uuid4(),
-            self.round_uuid,
+            str(self.uuid),
+            str(self.round_uuid),
             self.tippler,
             crypt(self.__password)
         ))
@@ -61,7 +61,9 @@ class Order:
             SELECT round_id, order_id, name AS tippler, password
             FROM orders
             WHERE order_id = ?
-        """, (order_id, ))
+        """, (
+            str(order_id),
+        ))
         res = cur.fetchone()
 
         if res is None:
@@ -80,7 +82,7 @@ class Order:
         """, (
             self.tippler,
             crypt(self.__password),
-            self.uuid,
+            str(self.uuid),
         ))
 
     def delete(self):
@@ -89,11 +91,15 @@ class Order:
         conn.execute("""
             DELETE FROM drinks
             WHERE order_id = ?
-        """, (self.uuid, ))
+        """, (
+            str(self.uuid),
+        ))
         conn.execute("""
             DELETE FROM orders
             WHERE order_id = ?
-        """, (self.uuid, ))
+        """, (
+            str(self.uuid),
+        ))
 
     #
     # Searches
@@ -108,7 +114,10 @@ class Order:
             FROM orders
             WHERE round_id = ?
             AND name = ?
-        """, (round_id, tippler, ))
+        """, (
+            str(round_id),
+            tippler,
+        ))
         res = cur.fetchone()
 
         if res is None:
@@ -126,7 +135,9 @@ class Order:
             SELECT round_id, order_id, name AS tippler, password
             FROM orders
             WHERE round_id = ?
-        """, (round_id, ))
+        """, (
+            str(round_id),
+        ))
         for res in cur.fetchall():
             orders.append(cls(**res).read_drinks())
         return orders
