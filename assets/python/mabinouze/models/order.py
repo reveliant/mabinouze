@@ -52,6 +52,7 @@ class Order:
             self.tippler,
             crypt(self.__password)
         ))
+        conn.commit()
 
     @classmethod
     def read(cls, order_id):
@@ -84,6 +85,7 @@ class Order:
             crypt(self.__password),
             str(self.uuid),
         ))
+        conn.commit()
 
     def delete(self):
         """Delete order in database"""
@@ -100,6 +102,7 @@ class Order:
         """, (
             str(self.uuid),
         ))
+        conn.commit()
 
     #
     # Searches

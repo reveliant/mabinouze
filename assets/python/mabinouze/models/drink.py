@@ -45,6 +45,7 @@ class Drink:
             self.name,
             self.quantity
         ))
+        conn.commit()
 
     @classmethod
     def read(cls, drink_id):
@@ -75,6 +76,7 @@ class Drink:
             self.quantity,
             str(self.uuid)
         ))
+        conn.commit()
 
     def delete(self):
         """Delete drink in database""" 
@@ -85,6 +87,7 @@ class Drink:
         """, (
             str(self.uuid),
         ))
+        conn.commit()
 
     #
     # Searches

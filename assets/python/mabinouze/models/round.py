@@ -67,6 +67,7 @@ class Round:
             crypt(self.__passwords['organizer']),
             crypt(self.__passwords['access'])
         ))
+        conn.commit()
 
     @classmethod
     def read(cls, round_id):
@@ -111,7 +112,7 @@ class Round:
             crypt(self.__passwords['access']),
             str(self.uuid)
         ))
-
+        conn.commit()
     #
     # Searches
     #
