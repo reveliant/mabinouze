@@ -12,7 +12,11 @@
         {{ hugo.Generator }}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>{{ .Site.Params.icon }}</text></svg>">
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        {{- $cssOptions := dict "transpiler" "libsass" "targetPath" "css/style.css" }}
+        {{- $cssOptions := dict
+            "transpiler" "libsass"
+            "targetPath" "css/style.css"
+            "enableSourceMap" true
+        }}
         {{- with resources.Get "sass/main.scss" | toCSS $cssOptions | minify | resources.Fingerprint "sha512" }}
         <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
         {{- end }}
@@ -20,7 +24,20 @@
         {{- if hugo.IsProduction }}
         <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.esm-browser.min.js" integrity="sha512-copxJKD/NFVXucbANMyvfhxkHOvcjZP6nLxCLCOZwrkxCif/l0C65OwLm8Ca9TOCnTnzRJE4UiiU+/snx9nS3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         {{- end }}
-        {{- with resources.Get "js/main.js" | js.Build (dict "minify" "true" "params" (dict "baseURL" site.BaseURL "api" site.Params.api) "shims" (dict "vue" "vendors/vue.esm-browser.min.js" "axios" "vendors/axios.js" "moment" "vendors/moment-with-locales.min.js" "mitt" "vendors/mitt.min.js")) | resources.Fingerprint "sha512" }}
+        {{- $jsOptions := dict
+            "minify" "true"
+            "params" (dict
+                "baseURL" site.BaseURL
+                "api" site.Params.api
+            )
+            "shims" (dict
+                "vue" "vendors/vue.esm-browser.min.js"
+                "axios" "vendors/axios.js"
+                "moment" "vendors/moment-with-locales.min.js"
+                "mitt" "vendors/mitt.min.js"
+            )
+        }}
+        {{- with resources.Get "js/main.js" | js.Build $jsOptions | resources.Fingerprint "sha512" }}
         <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
         {{- end }}
     </head>
@@ -36,16 +53,13 @@
                 </button>
             </div>
         </nav>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="navbar-menu">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="navbar-menu" aria-labelledby="settings-label">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="settings-label">Paramètres</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <form class="d-flex mt-3" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                {{ partial "sidebar" . }}
             </div>
         </div>              
         <main class="container-md flex-fill mt-4">

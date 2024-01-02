@@ -7,7 +7,7 @@
 import {ref, createApp} from 'vue';
 import moment from 'moment';
 import mitt from 'mitt';
-import {NewRound, SearchRound, Round, RoundDetails, MyOrder} from './components';
+import {NewRound, SearchRound, Round, RoundDetails, MyOrder, Settings} from './components';
 import params from '@params';
 
 const URLs = {
@@ -24,12 +24,28 @@ const URLs = {
 }*/
 
 const currentPath = ref(window.location.hash)
-console.log(currentPath.value)
-
 window.addEventListener('hashchange', () => {
   currentPath.value = window.location.hash
-  console.log(currentPath.value.slice(1))
 })
+
+const vueGlobals = {
+  emitter: mitt(),
+  urls: URLs,
+  encodeAuth: function (token) {
+    return unescape(encodeURIComponent(token));
+  },
+  getUserDefaultSettings: function () {
+    return {
+      username: localStorage.getItem("username") || "",
+      password: sessionStorage.getItem("password") || "",
+    }
+  },
+  setUserDefaultSettings: function (username, password) {
+    localStorage.setItem("username", username);
+    sessionStorage.setItem("password", password);
+    console.log("Settings updated");
+  },
+};
 
 window.addEventListener('load', function(){
     moment.locale(window.navigator.language);
@@ -38,8 +54,8 @@ window.addEventListener('load', function(){
         .component('SearchRound', SearchRound)
         .component('Round', Round)
         .component('RoundDetails', RoundDetails)
-        .component('MyOrder', MyOrder);
-      app.config.globalProperties.emitter = mitt();
-      app.config.globalProperties.urls = URLs;
+    .component('MyOrder', MyOrder)
+    .component('Settings', Settings);
+  Object.assign(app.config.globalProperties, vueGlobals);
       app.mount('body');
 });
