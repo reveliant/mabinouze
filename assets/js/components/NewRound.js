@@ -77,22 +77,39 @@ export default {
                 <div class="form-text" id="round-description-help">
                     Un petit texte d'explication sur la tournée, et son heure de début
                 </div>
-                <div class="input-group mt-3">
-                    <div class="form-floating">
-                        <input type="password" class="form-control" id="round-password" aria-describedby="round-password-help" placeholder="Mot de passe" required v-model="password">
-                        <label for="round-password">Mot de passe</label>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="round-password" aria-describedby="round-password-help" placeholder="Mot de passe d'organisation" required v-model="password">
+                            <label for="round-password">Mot de passe d'organisation</label>
+                        </div>
+                        <div class="form-text" id="round-password-help">
+                            Un mot de passe qui te permettra d'accéder aux détails des partitipants.
+                            Si tu le perds, ta tournée tourne au vinaigre !
+                        </div>
                     </div>
-                    <input type="submit" class="btn btn-primary" value="Créer la tournée">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="round-access-token" aria-describedby="round-access-token-help" placeholder="Mot de passe d'accès" v-model="access_token">
+                            <label for="round-access-token">Mot de passe d'accès (optionnel)</label>
+                        </div>
+                        <div class="form-text" id="round-access-token-help">
+                            Un mot de passe pour limiter l'accès aux seuls participants le connaissant
+                        </div>
+                    </div>
                 </div>
-                <div class="form-text" id="round-password-help">
-                    Un mot de passe qui te permettra d'accéder aux détails des partitipants.
-                    Si tu le perds, ta tournée tourne au vinaigre !
-                </div>
-                <div class="alert alert-primary mt-3">
-                    Le lien à communiquer aux assoifés est
-                    <a :href="'/' + id" class="fw-bold">{{ hostname }}/{{ id }}</a><br/>
-                    Les données seront conservées jusqu'à
-                    <strong>{{ dateUntil }}</strong>
+                <div class="row mt-3">
+                    <div class="col-md-10">
+                        <div class="alert alert-primary mb-0">
+                            Le lien à communiquer aux assoifés est
+                            <a :href="'/' + id" class="fw-bold">{{ hostname }}/{{ id }}</a><br/>
+                            Les données seront conservées jusqu'à
+                            <strong>{{ dateUntil }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-stretch">
+                        <input type="submit" class="btn btn-primary flex-fill" value="Créer la tournée">
+                    </div>
                 </div>
             </template>
         </form>
