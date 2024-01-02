@@ -56,6 +56,7 @@ body > footer {
     background-size: 240% auto;
     background-position: 50% 100%;
     color: $black;
+    text-shadow: $primary 0 0 5px;
 
     @include media-breakpoint-up('xs') {
         background-size: 210% auto;
@@ -65,7 +66,7 @@ body > footer {
     }
 }
 body > footer > .footer-background {
-    backdrop-filter: blur(1.25px);
+    backdrop-filter: blur(2.75px);
 }
 
 .calendar {
