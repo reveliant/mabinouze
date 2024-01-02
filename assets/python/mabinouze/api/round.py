@@ -7,31 +7,34 @@ from .utils import required_authentication, verify_authorization, authentication
 
 routes = Blueprint('round', __name__)
 
+# As `round` is a built-in function,
+# `event` is used as Round instance
+
 @routes.get('/search/<string:round_id>')
 @routes.get('/round/<uuid:round_id>')
 def get_round(round_id):
     """Read a round"""
     if str(request.url_rule).startswith("/v1/search/"):
-        obj = Round.search(round_id)
+        event = Round.search(round_id)
     else:
-        obj = Round.read(round_id)
+        event = Round.read(round_id)
 
-    if obj is None:
+    if event is None:
         return {'error': "No such round"}, 404
 
     if request.method == "HEAD":
         return ""
 
-    if obj.has_access_token():
+    if event.has_access_token():
         error = required_authentication("Bearer")
         if error is not None:
             return error
 
-        error = verify_authorization(obj.verify_access_token, request.authorization.token)
+        error = verify_authorization(event.verify_access_token, request.authorization.token)
         if error is not None:
             return error
 
-    return obj.read_orders().summary()
+    return event.read_orders().summary()
 
 @routes.post('/round')
 def post_round():
@@ -45,7 +48,7 @@ def post_round():
     if 'locked' in body:
         del body['locked']
     if any(x not in body for x in ['id', 'description', 'time', 'password']):
-        return {'error': "Missing compulsory properties"}, 400
+        return {'error': "Missing compulsory properties 'id', 'description', 'time' or 'password'"}, 400
 
     event = Round(**body)
     if event.exists():
@@ -58,9 +61,20 @@ def post_round():
 @routes.get('/round/<uuid:round_id>/details')
 @authentication_required('Bearer')
 def get_round_details(round_id):
-    """Read round details (i.e. orders)""" 
+    """Read round details (i.e. orders)"""
     if str(request.url_rule).startswith("/v1/search/"):
-        obj = Round.search(round_id)
+        event = Round.search(round_id)
+    else:
+        event = Round.read(round_id)
+
+    if event is None:
+        return {'error': "No such round"}, 404
+
+    error = verify_authorization(event.verify_password, request.authorization.token)
+    if error is not None:
+        return error
+
+    return event.read_orders().details()
     else:
         obj = Round.read(round_id)
 
