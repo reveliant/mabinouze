@@ -48,15 +48,16 @@ export default {
         },
         password(value){
             this.password = value;
+            encodedPassword = btoa(this.encodeAuth(this.password));
             axios.get(this.urls.getRound.replace('<id>', this.id), {
-                headers: {'Authorization': `Bearer ${btoa(this.password)}`}
+                headers: {'Authorization': `Bearer ${encodedPassword}`}
             }).then((response) => {
                 this.description = response.data.description;
                 let now = moment();
                 let time = moment(response.data.time);
                 this.time = (time.isSame(now, 'date') ? '' : time.format('dddd ')) + time.format('[à] LT')
                 this.found = true;
-                sessionStorage.setItem(`access:${this.id}`, btoa(this.password))
+                sessionStorage.setItem(`access:${this.id}`, encodedPassword)
             }).catch((error) => {})
         }
     },
