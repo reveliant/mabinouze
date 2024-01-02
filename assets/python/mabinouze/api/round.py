@@ -75,18 +75,31 @@ def get_round_details(round_id):
         return error
 
     return event.read_orders().details()
-    else:
-        obj = Round.read(round_id)
 
-    if obj is None:
+@routes.get('/search/<string:round_id>/order')
+@routes.get('/round/<uuid:round_id>/order')
+@authentication_required('Basic')
+def get_round_order(round_id):
+    """Read round own order"""
+    if str(request.url_rule).startswith("/v1/search/"):
+        event = Round.search(round_id)
+    else:
+        event = Round.read(round_id)
+
+    if event is None:
         return {'error': "No such round"}, 404
 
-    error = verify_authorization(obj.verify_password, request.authorization.token)
+    order = Order.search(event.uuid, request.authorization.username)
+    if order is None:
+        return {'error': "No such order"}, 404
+
+    error = verify_authorization(order.verify_password, request.authorization.password)
     if error is not None:
         return error
 
-    return obj.read_orders().details()
+    return order.read_drinks().to_json(with_drinks=True)
 
+@routes.post('/search/<string:round_id>/order')
 @routes.post('/round/<uuid:round_id>/order')
 @authentication_required('Basic')
 def post_round_order(round_id):
@@ -95,24 +108,29 @@ def post_round_order(round_id):
         return {'error': "Request Content-Type is not 'application/json'"}, 415
     body = request.get_json()
 
-    if 'expires' in body:
-        del body['expires']
-    if any(x not in body for x in ['name', 'password']):
-        return {'error': "Missing compulsory properties"}, 400
+    if 'order_id' in body:
+        del body['order_id']
+    if any(x not in body for x in ['tippler', 'password']):
+        return {'error': "Missing compulsory properties 'tippler' or 'password'"}, 400
 
-    event = Round.read(round_id)
+    if str(request.url_rule).startswith("/v1/search/"):
+        event = Round.search(round_id)
+    else:
+        event = Round.read(round_id)
+
     if event is None:
         return {'error': "No such round"}, 404
 
-    order = Order(**body)
-    other = Order.search(event.name, body['name'])
-    if other is None:
-        order.create()
-    else: # order exists
+    order = Order(round_id=event.uuid, **body)
+    other = Order.search(event.uuid, body['tippler'])
+    if other is not None:
+        # order exists
         if other.verify_password(request.authorization.password):
-            order.copy_id(other)
+            order.uuid = other.uuid
             order.update()
+            return order.to_json()
         else:
-            return {'error': "Order already exists"}, 400
+            return {'error': "Order already exists and invalid password supplied"}, 403
 
+    order.create()
     return order.to_json(), 201
