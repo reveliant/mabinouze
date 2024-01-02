@@ -12,8 +12,7 @@ class Order:
         self.round_uuid = kwargs.get('round_id', None)
         self.tippler = kwargs.get('tippler', "")
         self.drinks = kwargs.get('drinks', []) # list of Drinks
-        self.__password = kwargs['password'].encode() \
-            if 'password' in kwargs and kwargs['password'] is not None else None
+        self.__password = kwargs.get('password', None)
 
     def __str__(self):
         return f"{self.tippler}: {self.drinks}"

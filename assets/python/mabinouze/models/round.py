@@ -24,10 +24,8 @@ class Round:
         if self.times['expires'] is None:
             self.times['expires'] = self.times['round'] + timedelta(hours=6)
         self.__passwords = {
-            'organizer': kwargs['password'].encode() \
-                if 'password' in kwargs and kwargs['password'] is not None else None,
-            'access': kwargs['access_token'].encode() \
-                if 'access_token' in kwargs and kwargs['access_token'] is not None else None,
+            'organizer': kwargs.get('password', None),
+            'access': kwargs.get('access_token', None),
         }
         self.orders = kwargs.get('orders', []) # list of Orders
         self.__locked = bool(kwargs.get('locked', False))
