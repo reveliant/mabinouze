@@ -2,6 +2,13 @@ import axios from 'axios';
 import params from '@params';
 import Calendar from './Calendar.js'
 
+const Status = {
+    Waiting: 'Waiting',
+    Found: 'Found',
+    NotFound: 'Not Found',
+    NotAutenticated: 'NotAuthenticated'
+};
+
 export default {
     components: {
         Calendar
@@ -9,7 +16,8 @@ export default {
     data() {
       return {
         id: '',
-        found: false,
+        status: Status.Waiting,
+        Status: Status,
         description: '',
         time: '',
         drinks: [],
@@ -37,16 +45,28 @@ export default {
                 response.data.drinks.forEach(drink => this.drinks.push(drink));
                 this.total.drinks = response.data.drinks.reduce((acc, value) => acc + value.quantity, 0);
                 this.total.tipplers = response.data.tipplers;
+                this.status = Status.Found;
+            }).catch((error) => {
+                switch (error.response.status) {
+                    case 401:
+                        this.status = Status.NotAutenticated;
+                        break;
+                    case 404:
+                        this.status = Status.NotFound;
+                        break;
+                    default:
+                        this.status = Status.Waiting;
+                }
             });
         },
     },
     mounted() {
         this.emitter.on('updateOrder', this.update);
         this.id = document.location.pathname.split('/')[1];
-            this.update();
+        this.update();
     },
     template: `
-        <article v-if="found">
+        <article v-if="status == Status.Found">
             <h2 class="d-flex align-items-center">
                 {{ description }}
                 <calendar class="ms-auto" :date="time"></calendar>
@@ -61,11 +81,17 @@ export default {
             <p class="text-end">Total : {{ total.drinks }} consommations pour {{ total.tipplers }} assoifés</p>
             <p class="text-end"><a :href="'/' + id + '/details'" class="btn btn-primary">Voir le détail de la commande</a></p>
         </article>
-        <div v-else>
+        <div v-if="status == Status.NotFound">
             <h2>Oups !</h2>
             <p>
                 La tournée demandée n'existe pas...
                 <a href="/">retourner à la page d'accueil</a>
+            </p>
+        </div>
+        <div v-if="status == Status.NotAutenticated">
+            <h2>Oups !</h2>
+            <p>
+                Cette tournée nécessite un mot de passe.
             </p>
         </div>
     `

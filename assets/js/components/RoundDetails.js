@@ -1,6 +1,13 @@
 import axios from 'axios';
 import Calendar from './Calendar.js'
 
+const Status = {
+    Waiting: 'Waiting',
+    Found: 'Found',
+    NotFound: 'Not Found',
+    NotAutenticated: 'NotAuthenticated'
+};
+
 export default {
     components: {
         Calendar
@@ -8,7 +15,8 @@ export default {
     data() {
       return {
         id: '',
-        found: false,
+        status: Status.Waiting,
+        Status: Status,
         description: '',
         time: '',
         tipplers: []
@@ -27,11 +35,15 @@ export default {
                 this.tipplers = response.data.tipplers;
                 this.found = true;
             }).catch((error) => {
-                if (error.response.status == 401) {
-                    this.passwordProtected = true;
-                    document.getElementById("search-password").focus();
-                } else {
-                    this.passwordProtected = false;
+                switch (error.response.status) {
+                    case 401:
+                        this.status = Status.NotAutenticated;
+                        break;
+                    case 404:
+                        this.status = Status.NotFound;
+                        break;
+                    default:
+                        this.status = Status.Waiting;
                 }
             })
         },
@@ -43,7 +55,7 @@ export default {
         }
     },
     template: `
-        <article v-if="found">
+        <article v-if="status == Status.Found">
             <h2 class="d-flex align-items-center">
                 {{ description }}
                 <calendar class="ms-auto" :date="time"></calendar>
@@ -58,11 +70,17 @@ export default {
                 </ul>
             </template>
         </article>
-        <div v-else>
+        <div v-if="status == Status.NotFound">
             <h2>Oups !</h2>
             <p>
                 La tournée demandée n'existe pas...
                 <a href="/">retourner à la page d'accueil</a>
+            </p>
+        </div>
+        <div v-if="status == Status.NotAutenticated">
+            <h2>Oups !</h2>
+            <p>
+                Cette opération nécessite une authentification.
             </p>
         </div>
     `
