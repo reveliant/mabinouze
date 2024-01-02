@@ -13,9 +13,10 @@ import params from '@params';
 const URLs = {
   'getRound': params.api + '/search/<id>',
   'getRoundDetails': params.api + '/search/<id>/details',
+  'getRoundOrder': params.api + '/search/<id>/order',
   'round': params.api + '/round',
   'order': params.api + '/order',
-  'drink': params.api + '/drinks',
+  'drink': params.api + '/drink',
 }
 
 /*const routes = {
@@ -50,12 +51,12 @@ const vueGlobals = {
 window.addEventListener('load', function(){
     moment.locale(window.navigator.language);
     const app = createApp()
-        .component('NewRound', NewRound)
-        .component('SearchRound', SearchRound)
-        .component('Round', Round)
-        .component('RoundDetails', RoundDetails)
+    .component('NewRound', NewRound)
+    .component('SearchRound', SearchRound)
+    .component('Round', Round)
+    .component('RoundDetails', RoundDetails)
     .component('MyOrder', MyOrder)
     .component('Settings', Settings);
   Object.assign(app.config.globalProperties, vueGlobals);
-      app.mount('body');
+  app.mount('body');
 });

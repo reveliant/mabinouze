@@ -21,26 +21,29 @@ export default {
     },
     methods: {
         update(event) {
+            if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/))
+                return;
+            
             config = {};
             access_token = sessionStorage.getItem(`access:${this.id}`)
             if (access_token != null) {
                 config['headers'] = {'Authorization': `Bearer ${access_token}`}
             }
+
             axios.get(this.urls.getRound.replace('<id>', this.id), config).then((response) => {
                 this.description = response.data.description;
                 this.time = response.data.time;
-                this.drinks = response.data.drinks;
+                this.drinks.length = 0;
+                response.data.drinks.forEach(drink => this.drinks.push(drink));
                 this.total.drinks = response.data.drinks.reduce((acc, value) => acc + value.quantity, 0);
                 this.total.tipplers = response.data.tipplers;
-                this.found = true;
-            })
+            });
         },
     },
     mounted() {
+        this.emitter.on('updateOrder', this.update);
         this.id = document.location.pathname.split('/')[1];
-        if (this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/)) {
             this.update();
-        }
     },
     template: `
         <article v-if="found">
