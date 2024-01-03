@@ -17,6 +17,7 @@ export default {
         id: '',
         status: Status.Waiting,
         Status: Status,
+        password: '',
         description: '',
         time: '',
         tipplers: []
@@ -24,20 +25,27 @@ export default {
     },
     methods: {
         update(event) {
-            config = {};
-            access_token = sessionStorage.getItem(`admin:${this.id}`)
-            if (access_token != null) {
-                config['headers'] = {'Authorization': `Bearer ${access_token}`}
-            }
+            if (event) event.preventDefault();
+            if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/))
+                return;
+            
+            access_token = sessionStorage.getItem(`admin:${this.id}`) || btoa(this.encodeAuth(this.password));
+            config = {
+                headers: {'Authorization': `Bearer ${access_token}`}
+            };
             axios.get(this.urls.getRoundDetails.replace('<id>', this.id), config).then((response) => {
                 this.description = response.data.description;
                 this.time = response.data.time;
                 this.tipplers = response.data.tipplers;
-                this.found = true;
+                this.status = Status.Found;
+                sessionStorage.setItem(`admin:${this.id}`, access_token);
             }).catch((error) => {
                 switch (error.response.status) {
                     case 401:
+                    case 403:
                         this.status = Status.NotAutenticated;
+                        document.getElementById("details-password").focus();
+                        sessionStorage.removeItem(`admin:${this.id}`)
                         break;
                     case 404:
                         this.status = Status.NotFound;
@@ -77,11 +85,17 @@ export default {
                 <a href="/">retourner à la page d'accueil</a>
             </p>
         </div>
-        <div v-if="status == Status.NotAutenticated">
+        <div v-show="status == Status.NotAutenticated">
             <h2>Oups !</h2>
-            <p>
-                Cette opération nécessite une authentification.
-            </p>
+            <form class="mb-5" @submit="update">
+                <div class="input-group">
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="details-password" placeholder="Mot de passe d'accès" v-model="password">
+                        <label for="details-password">Cette opération nécessite une authentification</label>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Valider">
+                </div>
+            </form>
         </div>
     `
   }

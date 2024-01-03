@@ -32,11 +32,13 @@ export default {
                     this.found = true;
                     this.passwordProtected = false
                 }).catch((error) => {
-                    if (error.response.status == 401) {
-                        this.passwordProtected = true;
-                        document.getElementById("search-password").focus();
-                    } else {
-                        this.passwordProtected = false;
+                    switch (error.response.status) {
+                        case 401:
+                            this.passwordProtected = true;
+                            document.getElementById("search-password").focus();
+                            break;
+                        default:
+                            this.passwordProtected = false;
                     }
                 })
             } else {

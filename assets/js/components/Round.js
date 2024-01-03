@@ -18,6 +18,7 @@ export default {
         id: '',
         status: Status.Waiting,
         Status: Status,
+        password: '',
         description: '',
         time: '',
         drinks: [],
@@ -29,12 +30,13 @@ export default {
     },
     methods: {
         update(event) {
+            if (event) event.preventDefault();
             if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/))
                 return;
             
             config = {};
-            access_token = sessionStorage.getItem(`access:${this.id}`)
-            if (access_token != null) {
+            if (sessionStorage.getItem(`access:${this.id}`) !== null || this.password !== '') {
+                access_token = sessionStorage.getItem(`access:${this.id}`) || btoa(this.encodeAuth(this.password));
                 config['headers'] = {'Authorization': `Bearer ${access_token}`}
             }
 
@@ -49,7 +51,10 @@ export default {
             }).catch((error) => {
                 switch (error.response.status) {
                     case 401:
+                    case 403:
                         this.status = Status.NotAutenticated;
+                        document.getElementById("round-password").focus();
+                        sessionStorage.removeItem(`access:${this.id}`)
                         break;
                     case 404:
                         this.status = Status.NotFound;
@@ -88,11 +93,17 @@ export default {
                 <a href="/">retourner à la page d'accueil</a>
             </p>
         </div>
-        <div v-if="status == Status.NotAutenticated">
+        <div v-show="status == Status.NotAutenticated">
             <h2>Oups !</h2>
-            <p>
-                Cette tournée nécessite un mot de passe.
-            </p>
+            <form class="mb-5" @submit="update">
+                <div class="input-group">
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="round-password" placeholder="Mot de passe d'accès" v-model="password">
+                        <label for="round-password">Cette tournée nécessite un mot de passe</label>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Valider">
+                </div>
+            </form>
         </div>
     `
   }
