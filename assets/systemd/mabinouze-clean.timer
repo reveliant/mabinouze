@@ -1,0 +1,8 @@
+[Unit]
+Description=MaBinouze.fr Database Cleaning
+
+[Timer]
+OnCalendar=*-*-* *:00/5:00
+
+[Install]
+WantedBy=timers.target

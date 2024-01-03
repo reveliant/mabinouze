@@ -1,0 +1,13 @@
+[Unit]
+Description="MaBinouze.fr Database Cleaning"
+
+[Service]
+Type=simple
+User=mabinouze
+Group=mabinouze
+UMask=0111
+RuntimeDirectoryMode=0755
+RuntimeDirectory=mabinouze
+WorkingDirectory=/opt/mabinouze/assets/python/
+Environment=PYTHONPATH=/opt/mabinouze/assets/python/venv/lib/python3.11/site-packages
+ExecStart=/opt/mabinouze/assets/python/venv/bin/flask --app mabinouze:app clean-db
