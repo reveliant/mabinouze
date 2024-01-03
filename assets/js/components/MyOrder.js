@@ -96,7 +96,10 @@ export default {
     },
     mounted() {
         this.emitter.on('addToOrder', this.addToOrder);
-        this.emitter.on('updateUserDefaultSettings', this.update);
+        this.emitter.on('updateUserDefaultSettings', () => {
+            this.settings = this.getUserDefaultSettings()
+            this.update()
+        });
         this.id = document.location.pathname.split('/')[1];
         this.update();
     },
