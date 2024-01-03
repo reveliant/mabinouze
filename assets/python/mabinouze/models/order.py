@@ -141,7 +141,9 @@ class Order:
             str(round_id),
         ))
         for res in cur.fetchall():
-            orders.append(cls(**res).read_drinks())
+            order = cls(**res).read_drinks()
+            if len(order.drinks):
+                orders.append(order)
         return orders
 
     def read_drinks(self):
