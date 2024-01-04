@@ -80,8 +80,10 @@ export default {
                 this.drinks.clear();
                 response.data.drinks.forEach((drink) => this.drinks.set(drink.name, drink));
             }).catch((error) => {
-                if (error.response.status == 404) {
-                    this.orderId = undefined;
+                switch (error.response.status) {
+                    case 404:
+                        this.orderId = undefined;
+                        break;
                 }
             });
         },
@@ -101,10 +103,14 @@ export default {
         this.update();
     },
     template: `
-        <div v-if="!ready" class="alert alert-primary py-2">
+        <div v-show="!ready" class="alert alert-primary py-2" >
             Indique ton prénom et un mot de passe avant de passer des commandes !
+            <a href="#" class="alert-link" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">Paramétrer maintenant</a>
         </div>
-        <ul v-if="ready" class="list-group mb-4">
+        <ul v-show="ready" class="list-group mb-4">
+            <li class="list-group-item list-group-item-primary" v-if="orderId === undefined">
+                Il n'y a actuellement aucune commande à ton nom
+            </li>
             <li v-for="[name, drink] in drinks" class="list-group-item d-flex justify-content-between align-items-center">
                 <span class="flex-fill">{{ drink.name }}</span>
                 <span class="badge bg-danger rounded-pill" v-if="drink.quantity > 1">{{ drink.quantity }}</span>
