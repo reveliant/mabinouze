@@ -5,7 +5,7 @@ export default {
       return {
         id: '',
         orderId: undefined,
-        showError: true,
+        status: this.Status.Waiting,
         customOrder: "",
         settings: this.getUserDefaultSettings(),
         drinks: new Map()
@@ -73,29 +73,42 @@ export default {
             };
         },
         update(event) {
-            if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/) || !this.ready)
+
+            if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/) || !this.credentialsReady)
                 return;
             axios.get(this.urls.getRoundOrder.replace('<id>', this.id), this.config()).then((response) => {
                 this.orderId = response.data.id;
+                this.status = this.Status.Found;
                 this.drinks.clear();
                 response.data.drinks.forEach((drink) => this.drinks.set(drink.name, drink));
             }).catch((error) => {
+                this.orderId = undefined;
+                this.drinks.clear();
                 switch (error.response.status) {
-                    case 404:
-                        this.orderId = undefined;
+                    case 401:
+                        this.status = this.Status.NotAutenticated;
                         break;
+                    case 403:
+                        this.status = this.Status.NotAuthorized;
+                        break;
+                    case 404:
+                        this.status = this.Status.NotFound;
+                        break;
+                    default:
+                        this.status = this.Status.Waiting;
                 }
             });
         },
     },
     computed: {
-        ready() {
+        credentialsReady() {
             return (this.settings.username != "" && this.settings.password != "")
         }
     },
     mounted() {
         this.emitter.on('addToOrder', this.addToOrder);
         this.emitter.on('updateUserDefaultSettings', () => {
+            console.log("Reloading after credentials updated")
             this.settings = this.getUserDefaultSettings()
             this.update()
         });
@@ -103,13 +116,9 @@ export default {
         this.update();
     },
     template: `
-        <div v-show="!ready" class="alert alert-primary py-2" >
-            Indique ton prénom et un mot de passe avant de passer des commandes !
-            <a href="#" class="alert-link" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">Paramétrer maintenant</a>
-        </div>
-        <ul v-show="ready" class="list-group mb-4">
-            <li class="list-group-item list-group-item-primary" v-if="orderId === undefined">
-                Il n'y a actuellement aucune commande à ton nom
+        <ul v-show="[Status.Found, Status.NotFound].includes(status)" class="list-group mb-4">
+            <li class="list-group-item list-group-item-primary" v-if="status === Status.NotFound">
+                Il n'y a actuellement aucune commande à ton nom.
             </li>
             <li v-for="[name, drink] in drinks" class="list-group-item d-flex justify-content-between align-items-center">
                 <span class="flex-fill">{{ drink.name }}</span>
@@ -124,5 +133,13 @@ export default {
                 </form>
             </li>
         </ul>
+        <div class="alert alert-primary" v-if="status === Status.NotAuthorized">
+            Ton nom est déjà utilisé par un homonyme dans une commande.
+            <a href="#" class="alert-link" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">Changer les paramètres</a>
+        </div>
+        <div class="alert alert-primary py-2" v-show="!credentialsReady">
+            Indique ton prénom et un mot de passe avant de passer des commandes !
+            <a href="#" class="alert-link" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">Paramétrer maintenant</a>
+        </div>
     `
 }

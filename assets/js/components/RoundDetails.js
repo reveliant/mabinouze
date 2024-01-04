@@ -15,8 +15,7 @@ export default {
     data() {
       return {
         id: '',
-        status: Status.Waiting,
-        Status: Status,
+        status: this.Status.Waiting,
         password: '',
         description: '',
         time: '',
@@ -37,21 +36,21 @@ export default {
                 this.description = response.data.description;
                 this.time = response.data.time;
                 this.tipplers = response.data.tipplers;
-                this.status = Status.Found;
+                this.status = this.Status.Found;
                 sessionStorage.setItem(`admin:${this.id}`, access_token);
             }).catch((error) => {
                 switch (error.response.status) {
                     case 401:
                     case 403:
-                        this.status = Status.NotAutenticated;
+                        this.status = this.Status.NotAutenticated;
                         document.getElementById("details-password").focus();
                         sessionStorage.removeItem(`admin:${this.id}`)
                         break;
                     case 404:
-                        this.status = Status.NotFound;
+                        this.status = this.Status.NotFound;
                         break;
                     default:
-                        this.status = Status.Waiting;
+                        this.status = this.Status.Waiting;
                 }
             })
         },

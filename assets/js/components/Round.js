@@ -2,13 +2,6 @@ import axios from 'axios';
 import params from '@params';
 import Calendar from './Calendar.js'
 
-const Status = {
-    Waiting: 'Waiting',
-    Found: 'Found',
-    NotFound: 'Not Found',
-    NotAutenticated: 'NotAuthenticated'
-};
-
 export default {
     components: {
         Calendar
@@ -16,8 +9,7 @@ export default {
     data() {
       return {
         id: '',
-        status: Status.Waiting,
-        Status: Status,
+        status: this.Status.Waiting,
         password: '',
         description: '',
         time: '',
@@ -47,20 +39,20 @@ export default {
                 response.data.drinks.forEach(drink => this.drinks.push(drink));
                 this.total.drinks = response.data.drinks.reduce((acc, value) => acc + value.quantity, 0);
                 this.total.tipplers = response.data.tipplers;
-                this.status = Status.Found;
+                this.status = this.Status.Found;
             }).catch((error) => {
                 switch (error.response.status) {
                     case 401:
                     case 403:
-                        this.status = Status.NotAutenticated;
+                        this.status = this.Status.NotAutenticated;
                         document.getElementById("round-password").focus();
                         sessionStorage.removeItem(`access:${this.id}`)
                         break;
                     case 404:
-                        this.status = Status.NotFound;
+                        this.status = this.Status.NotFound;
                         break;
                     default:
-                        this.status = Status.Waiting;
+                        this.status = this.Status.Waiting;
                 }
             });
         },
