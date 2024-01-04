@@ -3,12 +3,12 @@
 from flask import Blueprint, request
 
 from ..models import Order, Drink
-from .utils import verify_authorization, authentication_required
+from .utils import verify_authorization, authentication_required, authentication_credentials
 
 routes = Blueprint('drink', __name__)
 
 @routes.get('/drink/<uuid:drink_id>')
-@authentication_required('Basic')
+@authentication_credentials
 def get_drink(drink_id):
     """Read drink"""
     drink = Drink.read(drink_id)
@@ -23,7 +23,7 @@ def get_drink(drink_id):
     return drink.to_json()
 
 @routes.put('/drink/<uuid:drink_id>')
-@authentication_required('Basic')
+@authentication_credentials
 def put_drink(drink_id):
     """Read drink"""
     if request.content_type != 'application/json':
@@ -50,7 +50,7 @@ def put_drink(drink_id):
     return drink.to_json()
 
 @routes.delete('/drink/<uuid:drink_id>')
-@authentication_required('Basic')
+@authentication_credentials
 def delete_drink(drink_id):
     """Delete drink"""
     if request.content_type != 'application/json':
@@ -74,7 +74,7 @@ def delete_drink(drink_id):
 
 
 @routes.post('/drink')
-@authentication_required('Basic')
+@authentication_credentials
 def post_drink():
     """Create drink"""
     if request.content_type != 'application/json':

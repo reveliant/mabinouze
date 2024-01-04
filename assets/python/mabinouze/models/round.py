@@ -1,11 +1,10 @@
 """MaBinouze Round model"""
 
 from datetime import datetime, timedelta
-from base64 import b64decode
 from uuid import uuid4
 
 from .order import Order
-from ..utils import get_db, crypt, verify
+from ..utils import get_db, crypt, verify, base64urldecode
 
 class Round:
     """MaBinouze Round model"""
@@ -186,11 +185,11 @@ class Round:
 
     def verify_password(self, token):
         """Verify an organizer password"""
-        return verify(b64decode(token).decode('utf-8'), self.__passwords['organizer'])
+        return verify(base64urldecode(token), self.__passwords['organizer'])
 
     def verify_access_token(self, token):
         """Verify an access token"""
-        return verify(b64decode(token).decode('utf-8'), self.__passwords['access'])
+        return verify(base64urldecode(token), self.__passwords['access'])
 
     def has_access_token(self):
         """Check if round requires an access token"""

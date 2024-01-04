@@ -69,10 +69,7 @@ export default {
         },
         config() {
             return {
-                auth: {
-                    username: this.encodeAuth(this.settings.username),
-                    password: this.encodeAuth(this.settings.password)
-                },
+                headers: {'Authorization': `Bearer ${this.base64UrlEncode(this.settings.username)}.${this.base64UrlEncode(this.settings.password)}`}
             };
         },
         update(event) {

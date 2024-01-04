@@ -36,7 +36,7 @@ export default {
             
             config = {};
             if (sessionStorage.getItem(`access:${this.id}`) !== null || this.password !== '') {
-                access_token = sessionStorage.getItem(`access:${this.id}`) || btoa(this.encodeAuth(this.password));
+                access_token = sessionStorage.getItem(`access:${this.id}`) || this.base64UrlEncode(this.password);
                 config['headers'] = {'Authorization': `Bearer ${access_token}`}
             }
 

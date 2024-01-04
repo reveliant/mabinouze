@@ -50,7 +50,7 @@ export default {
         },
         password(value){
             this.password = value;
-            encodedPassword = btoa(this.encodeAuth(this.password));
+            encodedPassword = this.base64UrlEncode(this.password);
             axios.get(this.urls.getRound.replace('<id>', this.id), {
                 headers: {'Authorization': `Bearer ${encodedPassword}`}
             }).then((response) => {

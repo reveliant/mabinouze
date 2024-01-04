@@ -32,8 +32,13 @@ window.addEventListener('hashchange', () => {
 const vueGlobals = {
   emitter: mitt(),
   urls: URLs,
-  encodeAuth: function (token) {
-    return unescape(encodeURIComponent(token));
+  base64UrlEncode: function (token) {
+    const bytes = new TextEncoder().encode(token)
+    const binString = String.fromCodePoint(...bytes);
+    return btoa(binString)
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
   },
   getUserDefaultSettings: function () {
     return {

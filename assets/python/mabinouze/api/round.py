@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 from ..models import Round, Order
-from .utils import required_authentication, verify_authorization, authentication_required
+from .utils import required_authentication, verify_authorization, authentication_required, authentication_credentials
 
 routes = Blueprint('round', __name__)
 
@@ -26,7 +26,7 @@ def get_round(round_id):
         return ""
 
     if event.has_access_token():
-        error = required_authentication("Bearer")
+        error = required_authentication()
         if error is not None:
             return error
 
@@ -59,7 +59,7 @@ def post_round():
 
 @routes.get('/search/<string:round_id>/details')
 @routes.get('/round/<uuid:round_id>/details')
-@authentication_required('Bearer')
+@authentication_required
 def get_round_details(round_id):
     """Read round details (i.e. orders)"""
     if str(request.url_rule).startswith("/v1/search/"):
@@ -78,7 +78,7 @@ def get_round_details(round_id):
 
 @routes.get('/search/<string:round_id>/order')
 @routes.get('/round/<uuid:round_id>/order')
-@authentication_required('Basic')
+@authentication_credentials
 def get_round_order(round_id):
     """Read round own order"""
     if str(request.url_rule).startswith("/v1/search/"):
@@ -101,7 +101,7 @@ def get_round_order(round_id):
 
 @routes.post('/search/<string:round_id>/order')
 @routes.post('/round/<uuid:round_id>/order')
-@authentication_required('Basic')
+@authentication_credentials
 def post_round_order(round_id):
     """Add order to a round"""
     if request.content_type != 'application/json':

@@ -29,7 +29,7 @@ export default {
             if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/))
                 return;
             
-            access_token = sessionStorage.getItem(`admin:${this.id}`) || btoa(this.encodeAuth(this.password));
+            access_token = sessionStorage.getItem(`admin:${this.id}`) || this.base64UrlEncode(this.password);
             config = {
                 headers: {'Authorization': `Bearer ${access_token}`}
             };
