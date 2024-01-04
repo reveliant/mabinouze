@@ -51,6 +51,13 @@ const vueGlobals = {
     sessionStorage.setItem("password", password);
     console.log("Settings updated");
   },
+  Status: {
+    Waiting: 'Waiting',
+    Found: 'Found',
+    NotAutenticated: 'NotAuthenticated',
+    NotAuthorized: 'NotAuthorized',
+    NotFound: 'Not Found',
+  },
 };
 
 window.addEventListener('load', function(){
