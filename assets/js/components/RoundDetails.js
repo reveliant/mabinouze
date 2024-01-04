@@ -77,6 +77,7 @@ export default {
                     </li>
                 </ul>
             </template>
+            <p class="text-end"><a :href="'/' + id + '/'" class="btn btn-primary">Retour au résumé de la commande</a></p>
         </article>
         <div v-if="status == Status.NotFound">
             <h2>Oups !</h2>
