@@ -1,6 +1,6 @@
 """MaBinouze API /v1/round"""
 
-from werkzeug.exceptions import BadRequest, Forbidden, NotFound, UnsupportedMediaType
+from werkzeug.exceptions import BadRequest, Forbidden, NotFound
 from flask import Blueprint, request
 
 from ..models import Round, Order
@@ -8,7 +8,8 @@ from .utils import (
     required_authentication,
     verify_authorization,
     authentication_required,
-    authentication_credentials
+    authentication_credentials,
+    sanitized_json
 )
 
 routes = Blueprint('round', __name__)
@@ -46,15 +47,7 @@ def get_round(round_id):
 @routes.post('/round')
 def post_round():
     """Create a new round"""
-    body = request.get_json()
-
-    if 'expires' in body:
-        del body['expires']
-    if 'locked' in body:
-        del body['locked']
-    if any(x not in body for x in ['id', 'description', 'time', 'password']):
-        raise BadRequest("Missing compulsory properties 'id', 'description', 'time' or 'password'")
-
+    body = sanitized_json(['expires','locked'], ['name', 'description', 'time', 'password'])
     event = Round(**body)
     if event.exists():
         raise BadRequest("Round already exists")
@@ -93,13 +86,7 @@ def get_round_order(round_id):
 @authentication_credentials
 def post_round_order(round_id):
     """Add order to a round"""
-    body = request.get_json()
-
-    if 'order_id' in body:
-        del body['order_id']
-    if any(x not in body for x in ['tippler', 'password']):
-        raise BadRequest("Missing compulsory properties 'tippler' or 'password'")
-
+    body = sanitized_json(['order_id'], ['tippler', 'password'])
     event = get_round_instance(round_id)
 
     order = Order(round_id=event.uuid, **body)

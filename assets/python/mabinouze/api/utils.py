@@ -50,3 +50,18 @@ def authentication_credentials(func):
 
         return func(*args, **kwargs)
     return decorated_function
+
+def sanitized_json(reserved_keys, required_keys):
+    """Sanitize input JSON object"""
+    body = request.get_json()
+
+    # Remove reserved, internal keys
+    for x in reserved_keys:
+        body.pop(x, None)
+
+    # Check required keys
+    missing = [x for x in required_keys if x not in body]
+    if missing:
+        raise BadRequest("Missing compulsory properties: " + ", ".join(missing))
+
+    return body
