@@ -19,7 +19,7 @@ def get_drink(drink_id):
     order = Order.read(drink.order_uuid)
     if order is None:
         raise NotFound("No such order")
-    verify_authorization(order.verify_password, request.authorization.password)
+    verify_authorization(order.verify_credentials, request.authorization)
 
     return drink.to_json()
 
@@ -36,7 +36,7 @@ def put_drink(drink_id):
     order = Order.read(drink.order_uuid)
     if order is None:
         raise NotFound("No such order")
-    verify_authorization(order.verify_password, request.authorization.password)
+    verify_authorization(order.verify_credentials, request.authorization)
 
     drink.quantity = body['quantity']
     if drink.quantity > 0:
@@ -56,7 +56,7 @@ def delete_drink(drink_id):
     order = Order.read(drink.order_uuid)
     if order is None:
         raise NotFound("No such order")
-    verify_authorization(order.verify_password, request.authorization.password)
+    verify_authorization(order.verify_credentials, request.authorization)
 
     drink.delete()
     return drink.to_json()
@@ -72,7 +72,7 @@ def post_drink():
     order = Order.read(drink.order_uuid)
     if order is None:
         raise NotFound("No such order")
-    verify_authorization(order.verify_password, request.authorization.password)
+    verify_authorization(order.verify_credentials, request.authorization)
 
     drink.create()
     return drink.to_json()

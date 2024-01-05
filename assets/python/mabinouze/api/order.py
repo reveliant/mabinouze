@@ -15,10 +15,6 @@ def get_order(order_id):
     order = Order.read(order_id)
     if order is None:
         raise NotFound("No such order")
-
-    if order.tippler != request.authorization.username:
-        raise Forbidden("Invalid authorization")
-
-    verify_authorization(order.verify_password, request.authorization.password)
+    verify_authorization(order.verify_credentials, request.authorization)
 
     return order.read_drinks().to_json()

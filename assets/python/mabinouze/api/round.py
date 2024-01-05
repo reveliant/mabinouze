@@ -76,8 +76,7 @@ def get_round_order(round_id):
     order = Order.search(event.uuid, request.authorization.username)
     if order is None:
         raise NotFound("No such order")
-
-    verify_authorization(order.verify_password, request.authorization.password)
+    verify_authorization(order.verify_credentials, request.authorization)
 
     return order.read_drinks().to_json(with_drinks=True)
 
@@ -90,17 +89,29 @@ def post_round_order(round_id):
     event = get_round_instance(round_id)
 
     order = Order(round_id=event.uuid, **body)
-    other = Order.search(event.uuid, body['tippler'])
+    arrival = Order.search(event.uuid, body['tippler'])
 
-    # Order does not exists
-    if other is None:
+    # Arrival order does not exist (create)
+    if arrival is None:
+        # Tippler name change
+        if body['tippler'] != request.authorization.username:
+            # Check departure credentials
+            depature = Order.search(event.uuid, request.authorization.username)
+            if depature is None:
+                raise NotFound("Tippler name and authentication mismatch, cannot rename tippler from inexistant order")
+            verify_authorization(depature.verify_credentials, request.authorization)
+
+            # Keep departure UUID
+            order.uuid = depature.uuid
+            order.update()
+            return order.to_json()
+
+        # Tippler creation
         order.create()
         return order.to_json(), 201
 
-    # Order exists
-    if not other.verify_password(request.authorization.password):
-        raise Forbidden("Order already exists and invalid password supplied")
-
-    order.uuid = other.uuid
+    # Arrival order exists (update)
+    verify_authorization(arrival.verify_credentials, request.authorization)
+    order.uuid = arrival.uuid
     order.update()
     return order.to_json()

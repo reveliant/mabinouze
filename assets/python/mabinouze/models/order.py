@@ -160,6 +160,12 @@ class Order:
         # pylint: disable=protected-access
         self.uuid = other.uuid
 
-    def verify_password(self, token):
-        """Verify a tippler password"""
-        return verify(token, self.__password)
+    def verify_credentials(self, credentials):
+        """Verify a tippler credentials"""
+        try:
+            return all([
+                credentials.username == self.tippler,
+                verify(credentials.password, self.__password)
+            ])
+        except AttributeError:
+            return False
