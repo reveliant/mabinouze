@@ -39,7 +39,7 @@ export default {
             }
         },
         createDrink(name) {
-            if (!this.ready)
+            if (!this.credentialsReady)
                 return new Promise();
             return axios.post(this.urls.drink, {
                 name: name,
@@ -51,7 +51,7 @@ export default {
             })
         },
         updateDrink(drink) {
-            if (!this.ready)
+            if (!this.credentialsReady)
                 return new Promise();
             return axios.put(this.urls.drink + '/' + drink.id, {
                 name: drink.name,
@@ -62,10 +62,10 @@ export default {
             })
         },
         submit(event) {
+            event.preventDefault();
             if (this.customOrder != "") {
                 this.addToOrder(this.customOrder).then(() => this.customOrder = "");
             }
-            event.preventDefault();
         },
         config() {
             return {
