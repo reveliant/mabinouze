@@ -12,7 +12,7 @@ from ..utils import base64urldecode
 def required_authentication():
     """Check that required authorization header is present"""
     if request.authorization is None:
-        resp = make_response({'error': f"Missing {auth_type} authentication"}, 401)
+        resp = make_response({'error': f"Missing Bearer authentication"}, 401)
         resp.headers['WWW-Authenticate'] = WWWAuthenticate(auth_type.capitalize())
         return resp
     if request.authorization.type != 'bearer':
