@@ -17,7 +17,7 @@ export default {
                 drink.quantity++;
                 return this.updateDrink(drink);
             } else {
-                if (!this.ready)
+                if (!this.credentialsReady)
                     return new Promise();
                 if (this.orderId !== undefined) {
                     return this.createDrink(name)
@@ -64,6 +64,7 @@ export default {
         submit(event) {
             event.preventDefault();
             if (this.customOrder != "") {
+                console.log("Add custom order");
                 this.addToOrder(this.customOrder).then(() => this.customOrder = "");
             }
         },
