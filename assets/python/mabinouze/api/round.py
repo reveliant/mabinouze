@@ -4,7 +4,12 @@ from werkzeug.exceptions import BadRequest, Forbidden, NotFound, UnsupportedMedi
 from flask import Blueprint, request
 
 from ..models import Round, Order
-from .utils import required_authentication, verify_authorization, authentication_required, authentication_credentials
+from .utils import (
+    required_authentication,
+    verify_authorization,
+    authentication_required,
+    authentication_credentials
+)
 
 routes = Blueprint('round', __name__)
 
@@ -50,7 +55,7 @@ def post_round():
     if 'locked' in body:
         del body['locked']
     if any(x not in body for x in ['id', 'description', 'time', 'password']):
-        return {'error': "Missing compulsory properties 'id', 'description', 'time' or 'password'"}, 400
+        raise BadRequest("Missing compulsory properties 'id', 'description', 'time' or 'password'")
 
     event = Round(**body)
     if event.exists():
@@ -81,9 +86,7 @@ def get_round_order(round_id):
     if order is None:
         raise NotFound("No such order")
 
-    error = verify_authorization(order.verify_password, request.authorization.password)
-    if error is not None:
-        return error
+    verify_authorization(order.verify_password, request.authorization.password)
 
     return order.read_drinks().to_json(with_drinks=True)
 
@@ -105,6 +108,7 @@ def post_round_order(round_id):
 
     order = Order(round_id=event.uuid, **body)
     other = Order.search(event.uuid, body['tippler'])
+
     # Order does not exists
     if other is None:
         order.create()

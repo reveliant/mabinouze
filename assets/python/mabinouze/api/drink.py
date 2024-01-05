@@ -4,7 +4,7 @@ from werkzeug.exceptions import NotFound
 from flask import Blueprint, request
 
 from ..models import Order, Drink
-from .utils import verify_authorization, authentication_required, authentication_credentials
+from .utils import verify_authorization, authentication_credentials
 
 routes = Blueprint('drink', __name__)
 
@@ -33,7 +33,7 @@ def put_drink(drink_id):
 
     if any(x not in body for x in ['name', 'quantity']):
         return {'error': "Missing compulsory properties 'name', or 'quantity'"}, 400
-    
+
     drink = Drink.read(drink_id)
     if drink is None:
         raise NotFound("No such drink")
@@ -60,7 +60,7 @@ def delete_drink(drink_id):
 
     if 'quantity' not in body:
         return {'error': "Missing compulsory property 'quantity'"}, 400
-    
+
     drink = Drink.read(drink_id)
     if drink is None:
         raise NotFound("No such drink")
@@ -86,8 +86,9 @@ def post_drink():
         del body['drink_id']
     if any(x not in body for x in ['name', 'quantity', 'order_id']):
         return {'error': "Missing compulsory properties 'name', 'quantity' or 'order_id'"}, 400
-    
+
     drink = Drink(**body)
+
     order = Order.read(drink.order_uuid)
     if order is None:
         raise NotFound("No such order")

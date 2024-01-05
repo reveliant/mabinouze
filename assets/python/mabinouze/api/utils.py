@@ -40,6 +40,7 @@ def authentication_credentials(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         required_authentication()
+
         try:
             (b64username, b64password) = request.authorization.token.split('.')
             request.authorization.username = base64urldecode(b64username)

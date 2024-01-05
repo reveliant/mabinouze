@@ -4,7 +4,7 @@ from werkzeug.exceptions import NotFound, Forbidden
 from flask import Blueprint, request
 
 from ..models import Order
-from .utils import verify_authorization, authentication_required, authentication_credentials
+from .utils import verify_authorization, authentication_credentials
 
 routes = Blueprint('order', __name__)
 
