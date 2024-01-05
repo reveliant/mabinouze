@@ -13,7 +13,7 @@ def required_authentication():
     """Check that required authorization header is present"""
     if request.authorization is None:
         resp = make_response({'error': f"Missing Bearer authentication"}, 401)
-        resp.headers['WWW-Authenticate'] = WWWAuthenticate(auth_type.capitalize())
+        resp.headers['WWW-Authenticate'] = WWWAuthenticate('Bearer')
         return resp
     if request.authorization.type != 'bearer':
         return {'error': "Invalid authorization type: expected Bearer,"\
