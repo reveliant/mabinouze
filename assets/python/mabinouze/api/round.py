@@ -46,8 +46,6 @@ def get_round(round_id):
 @routes.post('/round')
 def post_round():
     """Create a new round"""
-    if request.content_type != 'application/json':
-        raise UnsupportedMediaType("Request Content-Type is not 'application/json'")
     body = request.get_json()
 
     if 'expires' in body:
@@ -95,8 +93,6 @@ def get_round_order(round_id):
 @authentication_credentials
 def post_round_order(round_id):
     """Add order to a round"""
-    if request.content_type != 'application/json':
-        raise UnsupportedMediaType("Request Content-Type is not 'application/json'")
     body = request.get_json()
 
     if 'order_id' in body:
