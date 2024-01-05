@@ -1,5 +1,6 @@
 """MaBinouze API /v1/drink"""
 
+from werkzeug.exceptions import NotFound
 from flask import Blueprint, request
 
 from ..models import Order, Drink
@@ -13,12 +14,12 @@ def get_drink(drink_id):
     """Read drink"""
     drink = Drink.read(drink_id)
     if drink is None:
-        return {'error': "No such drink"}, 404
+        raise NotFound("No such drink")
 
     order = Order.read(drink.order_uuid)
-    error = verify_authorization(order.verify_password, request.authorization.password)
-    if error is not None:
-        return error
+    if order is None:
+        raise NotFound("No such order")
+    verify_authorization(order.verify_password, request.authorization.password)
 
     return drink.to_json()
 
@@ -35,12 +36,12 @@ def put_drink(drink_id):
     
     drink = Drink.read(drink_id)
     if drink is None:
-        return {'error': "No such drink"}, 404
+        raise NotFound("No such drink")
 
     order = Order.read(drink.order_uuid)
-    error = verify_authorization(order.verify_password, request.authorization.password)
-    if error is not None:
-        return error
+    if order is None:
+        raise NotFound("No such order")
+    verify_authorization(order.verify_password, request.authorization.password)
 
     drink.quantity = body['quantity']
     if drink.quantity > 0:
@@ -60,14 +61,14 @@ def delete_drink(drink_id):
     if 'quantity' not in body:
         return {'error': "Missing compulsory property 'quantity'"}, 400
     
-    drink = Drink(**body)
+    drink = Drink.read(drink_id)
     if drink is None:
-        return {'error': "No such drink"}, 404
+        raise NotFound("No such drink")
 
     order = Order.read(drink.order_uuid)
-    error = verify_authorization(order.verify_password, request.authorization.password)
-    if error is not None:
-        return error
+    if order is None:
+        raise NotFound("No such order")
+    verify_authorization(order.verify_password, request.authorization.password)
 
     drink.delete()
     return drink.to_json()
@@ -89,11 +90,8 @@ def post_drink():
     drink = Drink(**body)
     order = Order.read(drink.order_uuid)
     if order is None:
-        return {'error': "No such order"}, 404
-
-    error = verify_authorization(order.verify_password, request.authorization.password)
-    if error is not None:
-        return error
+        raise NotFound("No such order")
+    verify_authorization(order.verify_password, request.authorization.password)
 
     drink.create()
     return drink.to_json()

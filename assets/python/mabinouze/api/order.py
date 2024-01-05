@@ -1,7 +1,6 @@
 """MaBinouze API /v1/order"""
 
-import binascii
-
+from werkzeug.exceptions import NotFound, Forbidden
 from flask import Blueprint, request
 
 from ..models import Order
@@ -15,13 +14,11 @@ def get_order(order_id):
     """Read order"""
     order = Order.read(order_id)
     if order is None:
-        return {'error': "No such order"}, 404
+        raise NotFound("No such order")
 
     if order.tippler != request.authorization.username:
-        return {'error': "Invalid authorization"}, 403
+        raise Forbidden("Invalid authorization")
 
-    error = verify_authorization(order.verify_password, request.authorization.password)
-    if error is not None:
-        return error
+    verify_authorization(order.verify_password, request.authorization.password)
 
     return order.read_drinks().to_json()

@@ -1,5 +1,6 @@
 """MaBinouze API /v1/round"""
 
+from werkzeug.exceptions import BadRequest, Forbidden, NotFound, UnsupportedMediaType
 from flask import Blueprint, request
 
 from ..models import Round, Order
@@ -10,29 +11,30 @@ routes = Blueprint('round', __name__)
 # As `round` is a built-in function,
 # `event` is used as Round instance
 
-@routes.get('/search/<string:round_id>')
-@routes.get('/round/<uuid:round_id>')
-def get_round(round_id):
-    """Read a round"""
+def get_round_instance(round_id):
+    """Get requested round or raise NotFound"""
     if str(request.url_rule).startswith("/v1/search/"):
         event = Round.search(round_id)
     else:
         event = Round.read(round_id)
 
     if event is None:
-        return {'error': "No such round"}, 404
+        raise NotFound("No such round")
+
+    return event
+
+@routes.get('/search/<string:round_id>')
+@routes.get('/round/<uuid:round_id>')
+def get_round(round_id):
+    """Read a round"""
+    event = get_round_instance(round_id)
 
     if request.method == "HEAD":
         return ""
 
     if event.has_access_token():
-        error = required_authentication()
-        if error is not None:
-            return error
-
-        error = verify_authorization(event.verify_access_token, request.authorization.token)
-        if error is not None:
-            return error
+        required_authentication()
+        verify_authorization(event.verify_access_token, request.authorization.token)
 
     return event.read_orders().summary()
 
@@ -40,7 +42,7 @@ def get_round(round_id):
 def post_round():
     """Create a new round"""
     if request.content_type != 'application/json':
-        return {'error': "Request Content-Type is not 'application/json'"}, 415
+        raise UnsupportedMediaType("Request Content-Type is not 'application/json'")
     body = request.get_json()
 
     if 'expires' in body:
@@ -52,7 +54,7 @@ def post_round():
 
     event = Round(**body)
     if event.exists():
-        return {'error': "Round already exists"}, 400
+        raise BadRequest("Round already exists")
 
     event.create()
     return event.summary(), 201
@@ -62,17 +64,9 @@ def post_round():
 @authentication_required
 def get_round_details(round_id):
     """Read round details (i.e. orders)"""
-    if str(request.url_rule).startswith("/v1/search/"):
-        event = Round.search(round_id)
-    else:
-        event = Round.read(round_id)
+    event = get_round_instance(round_id)
 
-    if event is None:
-        return {'error': "No such round"}, 404
-
-    error = verify_authorization(event.verify_password, request.authorization.token)
-    if error is not None:
-        return error
+    verify_authorization(event.verify_password, request.authorization.token)
 
     return event.read_orders().details()
 
@@ -81,17 +75,11 @@ def get_round_details(round_id):
 @authentication_credentials
 def get_round_order(round_id):
     """Read round own order"""
-    if str(request.url_rule).startswith("/v1/search/"):
-        event = Round.search(round_id)
-    else:
-        event = Round.read(round_id)
-
-    if event is None:
-        return {'error': "No such round"}, 404
+    event = get_round_instance(round_id)
 
     order = Order.search(event.uuid, request.authorization.username)
     if order is None:
-        return {'error': "No such order"}, 404
+        raise NotFound("No such order")
 
     error = verify_authorization(order.verify_password, request.authorization.password)
     if error is not None:
@@ -105,32 +93,27 @@ def get_round_order(round_id):
 def post_round_order(round_id):
     """Add order to a round"""
     if request.content_type != 'application/json':
-        return {'error': "Request Content-Type is not 'application/json'"}, 415
+        raise UnsupportedMediaType("Request Content-Type is not 'application/json'")
     body = request.get_json()
 
     if 'order_id' in body:
         del body['order_id']
     if any(x not in body for x in ['tippler', 'password']):
-        return {'error': "Missing compulsory properties 'tippler' or 'password'"}, 400
+        raise BadRequest("Missing compulsory properties 'tippler' or 'password'")
 
-    if str(request.url_rule).startswith("/v1/search/"):
-        event = Round.search(round_id)
-    else:
-        event = Round.read(round_id)
-
-    if event is None:
-        return {'error': "No such round"}, 404
+    event = get_round_instance(round_id)
 
     order = Order(round_id=event.uuid, **body)
     other = Order.search(event.uuid, body['tippler'])
-    if other is not None:
-        # order exists
-        if other.verify_password(request.authorization.password):
-            order.uuid = other.uuid
-            order.update()
-            return order.to_json()
-        else:
-            return {'error': "Order already exists and invalid password supplied"}, 403
+    # Order does not exists
+    if other is None:
+        order.create()
+        return order.to_json(), 201
 
-    order.create()
-    return order.to_json(), 201
+    # Order exists
+    if not other.verify_password(request.authorization.password):
+        raise Forbidden("Order already exists and invalid password supplied")
+
+    order.uuid = other.uuid
+    order.update()
+    return order.to_json()
