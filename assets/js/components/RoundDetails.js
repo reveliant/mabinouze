@@ -1,16 +1,13 @@
 import axios from 'axios';
 import Calendar from './Calendar.js'
-
-const Status = {
-    Waiting: 'Waiting',
-    Found: 'Found',
-    NotFound: 'Not Found',
-    NotAutenticated: 'NotAuthenticated'
-};
+import Drink from './Drink.js'
+import NewDrink from './NewDrink.js'
 
 export default {
     components: {
-        Calendar
+        Calendar,
+        Drink,
+        NewDrink,
     },
     data() {
       return {
@@ -19,20 +16,31 @@ export default {
         password: '',
         description: '',
         time: '',
-        tipplers: []
+        tipplers: [],
+        error: ''
       }
     },
     methods: {
+        addToOrder(msg) {
+            axios.post(this.urls.drink, {
+                name: msg.drink,
+                quantity: 1,
+                order_id: msg.order,
+            }, this.config()).then((response) => {
+                this.update()
+            })
+        },
+        config() {
+            access_token = sessionStorage.getItem(`admin:${this.id}`) || this.base64UrlEncode(this.password);
+            return {
+                headers: {'Authorization': `Bearer ${access_token}`}
+            };
+        },
         update(event) {
             if (event) event.preventDefault();
             if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/))
-                return;
-            
-            access_token = sessionStorage.getItem(`admin:${this.id}`) || this.base64UrlEncode(this.password);
-            config = {
-                headers: {'Authorization': `Bearer ${access_token}`}
-            };
-            axios.get(this.urls.getRoundDetails.replace('<id>', this.id), config).then((response) => {
+                return;            
+            axios.get(this.urls.getRoundDetails.replace('<id>', this.id), this.config()).then((response) => {
                 this.description = response.data.description;
                 this.time = response.data.time;
                 this.tipplers = response.data.tipplers;
@@ -56,10 +64,10 @@ export default {
         },
     },
     mounted() {
+        this.emitter.on('addToOrder', this.addToOrder);
+        this.emitter.on('updateOrder', this.update);
         this.id = document.location.pathname.split('/')[1];
-        if (this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/)) {
-            this.update();
-        }
+        this.update();
     },
     template: `
         <article v-if="status == Status.Found">
@@ -70,10 +78,8 @@ export default {
             <template v-for="tippler in tipplers">
                 <h3>{{ tippler.name }}</h3>
                 <ul class="list-group mb-4">
-                    <li v-for="drink in tippler.drinks" class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="flex-fill">{{ drink.name }}</span>
-                        <span class="badge bg-danger rounded-pill" v-if="drink.quantity > 1">{{ drink.quantity }}</span>
-                    </li>
+                    <Drink v-for="drink in tippler.drinks" v-bind="drink" :config="config()"></Drink>
+                    <NewDrink :order="tippler.id"></NewDrink>
                 </ul>
             </template>
             <p class="text-end"><a :href="'/' + id + '/'" class="btn btn-primary">Retour au résumé de la commande</a></p>

@@ -1,6 +1,12 @@
 import axios from 'axios';
+import Drink from './Drink.js'
+import NewDrink from './NewDrink.js'
 
 export default {
+    components: {
+        Drink,
+        NewDrink,
+    },
     data() {
       return {
         id: '',
@@ -12,30 +18,25 @@ export default {
       }
     },
     methods: {
-        addToOrder(name) {
-            if ((drink = this.drinks.get(name)) !== undefined) {
-                drink.quantity++;
-                return this.updateDrink(drink);
-            } else {
+        addToOrder(msg) {
+            let drink = this.drinks.get(event.msg);
+            if (drink === undefined) {
                 if (!this.credentialsReady)
                     return new Promise();
                 if (this.orderId !== undefined) {
-                    return this.createDrink(name)
+                    return this.createDrink(msg.drink)
                 } else {
                     return axios.post(this.urls.getRoundOrder.replace('<id>', this.id), {
                         tippler: this.settings.username,
                         password: this.settings.password,
                     }, this.config()).then((response) => {
                         this.orderId = response.data.id;
-                        this.createDrink(name)
+                        this.createDrink(msg.drink)
                     })
                 }
-            }
-        },
-        removeFromOrder(name) {
-            if ((drink = this.drinks.get(name)) !== undefined) {
-                drink.quantity--;
-                this.updateDrink(drink);
+            } else {
+                drink.quantity++;
+                return this.updateDrink(drink);
             }
         },
         createDrink(name) {
@@ -61,20 +62,12 @@ export default {
                 this.update()
             })
         },
-        submit(event) {
-            event.preventDefault();
-            if (this.customOrder != "") {
-                console.log("Add custom order");
-                this.addToOrder(this.customOrder).then(() => this.customOrder = "");
-            }
-        },
         config() {
             return {
                 headers: {'Authorization': `Bearer ${this.base64UrlEncode(this.settings.username)}.${this.base64UrlEncode(this.settings.password)}`}
             };
         },
         update(event) {
-
             if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/) || !this.credentialsReady)
                 return;
             axios.get(this.urls.getRoundOrder.replace('<id>', this.id), this.config()).then((response) => {
@@ -108,6 +101,7 @@ export default {
     },
     mounted() {
         this.emitter.on('addToOrder', this.addToOrder);
+        this.emitter.on('updateOrder', this.update)
         this.emitter.on('updateUserDefaultSettings', () => {
             console.log("Reloading after credentials updated")
             this.settings = this.getUserDefaultSettings()
@@ -121,18 +115,8 @@ export default {
             <li class="list-group-item list-group-item-primary" v-if="status === Status.NotFound">
                 Il n'y a actuellement aucune commande à ton nom.
             </li>
-            <li v-for="[name, drink] in drinks" class="list-group-item d-flex justify-content-between align-items-center">
-                <span class="flex-fill">{{ drink.name }}</span>
-                <span class="badge bg-danger rounded-pill" v-if="drink.quantity > 1">{{ drink.quantity }}</span>
-                <button class="list-group-item-add btn btn-danger badge ms-3" @click="removeFromOrder(drink.name)">&ndash;</button>
-                <button class="list-group-item-add btn btn-success badge ms-1" @click="addToOrder(drink.name)">+</button>
-            </li>
-            <li class="list-group-item">
-                <form class="d-flex justify-content-between align-items-center" @submit="submit">
-                <input type="text" class="form-control flex-fill p-0 border-0" placeholder="Autre consommation" required v-model="customOrder" />
-                <button class="list-group-item-add visible btn btn-success badge ms-3">+</button>
-                </form>
-            </li>
+            <Drink v-for="[name, drink] in drinks" v-bind="drink" :config="config()"></Drink>
+            <NewDrink></NewDrink>
         </ul>
         <div class="alert alert-primary" v-if="status === Status.NotAuthorized">
             Ton nom est déjà utilisé par un homonyme dans une commande.
