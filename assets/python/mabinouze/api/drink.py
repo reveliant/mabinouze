@@ -3,10 +3,26 @@
 from werkzeug.exceptions import NotFound
 from flask import Blueprint, request
 
-from ..models import Order, Drink
-from .utils import verify_authorization, authentication_credentials, sanitized_json
+from ..models import Drink
+from .utils import authentication_credentials, sanitized_json
 
 routes = Blueprint('drink', __name__)
+
+def verify_drink_authorization(drink):
+    from werkzeug.exceptions import Forbidden
+    from ..models import Order, Round
+    from .utils import verify_authorization
+
+    order = Order.read(drink.order_uuid)
+    if order is None:
+        raise NotFound("No such order")
+    try:
+        verify_authorization(order.verify_credentials, request.authorization)
+    except Forbidden:
+        event = Round.read(order.round_uuid)
+        if event is None:
+            raise NotFound("No such round")
+        verify_authorization(event.verify_password, request.authorization.token)
 
 @routes.get('/drink/<uuid:drink_id>')
 @authentication_credentials
@@ -15,11 +31,7 @@ def get_drink(drink_id):
     drink = Drink.read(drink_id)
     if drink is None:
         raise NotFound("No such drink")
-
-    order = Order.read(drink.order_uuid)
-    if order is None:
-        raise NotFound("No such order")
-    verify_authorization(order.verify_credentials, request.authorization)
+    verify_drink_authorization(drink)
 
     return drink.to_json()
 
@@ -32,11 +44,7 @@ def put_drink(drink_id):
     drink = Drink.read(drink_id)
     if drink is None:
         raise NotFound("No such drink")
-
-    order = Order.read(drink.order_uuid)
-    if order is None:
-        raise NotFound("No such order")
-    verify_authorization(order.verify_credentials, request.authorization)
+    verify_drink_authorization(drink)
 
     drink.quantity = body['quantity']
     if drink.quantity > 0:
@@ -52,11 +60,7 @@ def delete_drink(drink_id):
     drink = Drink.read(drink_id)
     if drink is None:
         raise NotFound("No such drink")
-
-    order = Order.read(drink.order_uuid)
-    if order is None:
-        raise NotFound("No such order")
-    verify_authorization(order.verify_credentials, request.authorization)
+    verify_drink_authorization(drink)
 
     drink.delete()
     return drink.to_json()
@@ -68,11 +72,7 @@ def post_drink():
     """Create drink"""
     body = sanitized_json(['drink_id'], ['name', 'quantity', 'order_id'])
     drink = Drink(**body)
-
-    order = Order.read(drink.order_uuid)
-    if order is None:
-        raise NotFound("No such order")
-    verify_authorization(order.verify_credentials, request.authorization)
+    verify_drink_authorization(drink)
 
     drink.create()
     return drink.to_json()

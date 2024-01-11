@@ -19,6 +19,15 @@ def required_authentication():
             f" received {request.authorization.type.capitalize()}"
         )
 
+def required_credentials():
+    """Check that required authorization header contains user credentials"""
+    try:
+        (b64username, b64password) = request.authorization.token.split('.')
+        request.authorization.username = base64urldecode(b64username)
+        request.authorization.password = base64urldecode(b64password)
+    except (ValueError, binascii.Error, UnicodeDecodeError) as err:
+        raise BadRequest("Invalid authorization token") from err
+
 def verify_authorization(method, token):
     """Verify authorization for a given token with matching object method"""
     try:
@@ -41,12 +50,13 @@ def authentication_credentials(func):
     def decorated_function(*args, **kwargs):
         required_authentication()
 
-        try:
-            (b64username, b64password) = request.authorization.token.split('.')
-            request.authorization.username = base64urldecode(b64username)
-            request.authorization.password = base64urldecode(b64password)
-        except (ValueError, binascii.Error, UnicodeDecodeError) as err:
-            raise BadRequest("Invalid authorization token") from err
+        if '.' in request.authorization.token:
+            try:
+                (b64username, b64password) = request.authorization.token.split('.')
+                request.authorization.username = base64urldecode(b64username)
+                request.authorization.password = base64urldecode(b64password)
+            except (ValueError, binascii.Error, UnicodeDecodeError) as err:
+                raise BadRequest("Invalid authorization token") from err
 
         return func(*args, **kwargs)
     return decorated_function
