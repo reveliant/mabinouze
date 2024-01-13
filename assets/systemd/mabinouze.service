@@ -10,7 +10,9 @@ RuntimeDirectoryMode=0755
 RuntimeDirectory=mabinouze
 WorkingDirectory=/opt/mabinouze/assets/python/
 Environment=PYTHONPATH=/opt/mabinouze/assets/python/venv/lib/python3.11/site-packages
-ExecStart=/usr/bin/uwsgi -s /run/mabinouze/api.sock --plugin python3 --manage-script-name --mount /=mabinouze:app --logto /dev/null
+ExecStart=/usr/bin/uwsgi -s /run/mabinouze/api.sock --plugin python3 --manage-script-name --mount /=mabinouze:app --enable-threads --thunder-lock --master
+# --logto /dev/null
+KillSignal=SIGQUIT
 
 [Install]
 WantedBy=multi-user.target
