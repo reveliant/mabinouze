@@ -23,35 +23,37 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="1.6563438"
-     inkscape:cx="152.44419"
-     inkscape:cy="153.95354"
+     inkscape:cx="153.04794"
+     inkscape:cy="153.95355"
      inkscape:window-width="1312"
      inkscape:window-height="699"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg3511" />
+     inkscape:current-layer="moins18" />
   <defs
      id="defs" />
   <path
      d="m 271.22595,142.33615 a 130.81475,128.28939 0 1 1 -261.629492,0 130.81475,128.28939 0 1 1 261.629492,0 z"
      id="fond"
      style="fill:#ffffff;fill-opacity:1;stroke-width:4.94307;stroke-miterlimit:4;stroke-dasharray:none;stroke:none" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:213.333px;line-height:1.25;font-family:sans-serif;letter-spacing:-20px;fill:#000000;fill-opacity:1;stroke:none"
-     x="18.261627"
-     y="217.75053"
-     id="moins18"><tspan
-       sodipodi:role="line"
-       id="tspan11030"
-       x="18.261627"
-       y="217.75053"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:213.333px;font-family:'Roboto Condensed';-inkscape-font-specification:'Roboto Condensed,  Bold'"><tspan
-         style="font-size:213.333px;letter-spacing:-30px"
-         id="tspan11143">-</tspan><tspan
-         style="letter-spacing:-30px"
-         id="tspan11147">18</tspan></tspan></text>
+  <g
+     aria-label="-18"
+     id="moins18"
+     style="font-size:213.333px;line-height:1.25;letter-spacing:-20px">
+    <path
+       d="m 82.011525,140.45899 v 24.47913 H 31.074107 v -24.47913 z"
+       style="letter-spacing:-30px"
+       id="path344" />
+    <path
+       d="M 140.55305,65.875777 V 217.75053 H 111.07393 V 101.91739 L 82.219812,112.95903 V 88.375741 L 137.42806,65.875777 Z"
+       style="letter-spacing:-30px"
+       id="path346" />
+    <path
+       d="m 241.17785,176.08393 q 0,21.56247 -12.29165,32.70829 -12.29165,11.04164 -31.14578,11.04164 -18.74998,0 -31.24996,-11.04164 -12.49998,-11.14582 -12.49998,-32.70829 0,-12.60414 5.41666,-21.97913 5.52083,-9.37498 14.79165,-14.58331 -17.70831,-10.83331 -17.70831,-33.12494 0,-20.624972 11.56248,-31.562454 11.66665,-10.937483 29.58329,-10.937483 18.12497,0 29.58328,10.937483 11.45832,10.937482 11.45832,31.562454 0,22.29163 -17.60414,33.22911 9.27082,5.20832 14.68748,14.58331 5.41666,9.37498 5.41666,21.87496 z m -31.97912,-68.22905 q 0,-8.74999 -2.91666,-14.062481 -2.8125,-5.416658 -8.64582,-5.416658 -11.56248,0 -11.56248,19.479139 0,8.95832 2.91666,14.47914 2.91666,5.41666 8.74999,5.41666 5.83332,0 8.64581,-5.41666 2.8125,-5.52082 2.8125,-14.47914 z m 2.5,66.04156 q 0,-10.10415 -3.85416,-15.83331 -3.75,-5.83332 -10.31249,-5.83332 -6.56249,0 -10.31248,5.83332 -3.75,5.72916 -3.75,15.83331 0,9.99998 3.75,15.72914 3.74999,5.72916 10.52082,5.72916 6.77082,0 10.31248,-5.72916 3.64583,-5.72916 3.64583,-15.72914 z"
+       style="letter-spacing:-30px"
+       id="path348" />
+  </g>
   <path
      id="interdiction"
      style="fill:#dc3545;fill-opacity:1;fill-rule:nonzero;stroke:#dc3545;stroke-width:10;stroke-opacity:1;stroke-dasharray:none"
