@@ -1,10 +1,10 @@
 import axios from 'axios';
 import params from '@params';
-import Calendar from './Calendar.js'
+import RoundTitle from './RoundTitle.js'
 
 export default {
     components: {
-        Calendar
+        RoundTitle
     },
     data() {
       return {
@@ -63,10 +63,7 @@ export default {
     },
     template: `
         <article v-if="status == Status.Found">
-            <h2 class="d-flex align-items-center">
-                {{ description }}
-                <calendar class="ms-auto" :date="time"></calendar>
-            </h2>
+            <round-title :id="id" :description="description" :time="time"></round-title>
             <ul class="list-group mb-4">
                 <li v-for="drink in drinks" class="list-group-item d-flex justify-content-between align-items-center">
                     <span class="flex-fill">{{ drink.name }}</span>

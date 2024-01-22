@@ -1,11 +1,11 @@
 import axios from 'axios';
-import Calendar from './Calendar.js'
+import RoundTitle from './RoundTitle.js'
 import Drink from './Drink.js'
 import NewDrink from './NewDrink.js'
 
 export default {
     components: {
-        Calendar,
+        RoundTitle,
         Drink,
         NewDrink,
     },
@@ -70,10 +70,7 @@ export default {
     },
     template: `
         <article v-if="status == Status.Found">
-            <h2 class="d-flex align-items-center">
-                {{ description }}
-                <calendar class="ms-auto" :date="time"></calendar>
-            </h2>
+            <round-title :id="id" :description="description" :time="time"></round-title>
             <template v-for="tippler in tipplers">
                 <h3>{{ tippler.name }}</h3>
                 <ul class="list-group mb-4">
