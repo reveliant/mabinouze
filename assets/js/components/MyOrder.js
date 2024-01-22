@@ -68,8 +68,7 @@ export default {
             };
         },
         update(event) {
-            if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/) || !this.credentialsReady)
-                return;
+            if (!this.validRoundName() || !this.credentialsReady) return;
             axios.get(this.urls.getRoundOrder.replace('<id>', this.id), this.config()).then((response) => {
                 this.orderId = response.data.id;
                 this.status = this.Status.Found;

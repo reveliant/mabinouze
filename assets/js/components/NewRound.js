@@ -10,6 +10,8 @@ export default {
             time: moment().add(1, 'h').minutes(0).format('HH:mm'),
             password: '',
             access_token: '',
+            status: this.Status.Waiting,
+            error: null,
         }
     },
     computed: {
@@ -28,14 +30,34 @@ export default {
             let until = moment(this.roundTime).add(6, 'h');
             return (until.isSame(now, 'date') ? '' : until.format('dddd ')) + until.format('LT')
         },
-        validId() { return this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/) },
+    },
+    watch: {
+        id: function(value) {
+            this.id = value;
+            this.error = null;
+            this.status = this.Status.Waiting
+
+            if (!this.validRoundName()) return;
+            axios.head(this.urls.getRound.replace('<id>', this.id)).then((response) => {
+                this.status = this.Status.Found;
+            }).catch((error) => {
+                switch (error.response.status) {
+                    case 404:
+                        this.status = this.Status.NotFound;
+                        break;
+                    default:
+                        this.error = error.response.body;
+                        this.status = this.Status.Waiting;
+                }
+            });
+        }
     },
     methods: {
         submit(target) {
             target.preventDefault();
-            if (this.valid) {
+            if (this.status == this.Status.NotFound) {
                 axios.post(this.urls.round, {
-                    id: this.id,
+                    name: this.id,
                     description: this.description,
                     time: this.roundTime.toISOString(),
                     password: this.password,
@@ -46,7 +68,9 @@ export default {
                         sessionStorage.setItem(`access:${this.id}`, btoa(this.access_token))
                     }
                     document.location.href = "/" + this.id + "/"
-                })
+                }).catch((error) => {
+                    this.error = error.response.body;
+                });
             }
         },
     },
@@ -59,7 +83,7 @@ export default {
             <div class="form-text" id="round-id-help">
                 Le nom de la tournée doit faire au moins 4 caractères (chiffres ou lettres non accentuées, tiret possible à partir du 5<sup>è</sup> caractère)
             </div>
-            <template v-if="validId">
+            <template v-if="status == Status.NotFound">
                 <div class="row mt-3">
                     <div class="col-md-10">
                         <div class="form-floating">
@@ -101,7 +125,7 @@ export default {
                 <div class="row mt-3">
                     <div class="col-md-10">
                         <div class="alert alert-primary mb-0">
-                            Le lien à communiquer aux assoifés est
+                            Le lien à communiquer aux assoifés sera
                             <a :href="'/' + id" class="fw-bold">{{ hostname }}/{{ id }}</a><br/>
                             Les données seront conservées jusqu'à
                             <strong>{{ dateUntil }}</strong>
@@ -112,6 +136,10 @@ export default {
                     </div>
                 </div>
             </template>
+            <div class="alert alert-primary" v-if="status === Status.Found">
+                Cette tournée existe déjà
+            </div>
+            <div class="alert alert-primary" v-if="error" v-text="error"></div>
         </form>
     `
 }

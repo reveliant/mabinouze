@@ -51,6 +51,10 @@ const vueGlobals = {
     sessionStorage.setItem("password", password);
     console.log("Settings updated");
   },
+  validRoundName: function() {
+    console.log("Check round name")
+    return this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/);
+  },
   Status: {
     Waiting: 'Waiting',
     Found: 'Found',

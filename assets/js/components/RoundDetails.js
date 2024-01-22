@@ -38,8 +38,7 @@ export default {
         },
         update(event) {
             if (event) event.preventDefault();
-            if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/))
-                return;            
+            if (!this.validRoundName()) return;            
             axios.get(this.urls.getRoundDetails.replace('<id>', this.id), this.config()).then((response) => {
                 this.description = response.data.description;
                 this.time = response.data.time;

@@ -23,8 +23,7 @@ export default {
     methods: {
         update(event) {
             if (event) event.preventDefault();
-            if (!this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/))
-                return;
+            if (!this.validRoundName()) return;
             
             config = {};
             if (sessionStorage.getItem(`access:${this.id}`) !== null || this.password !== '') {
