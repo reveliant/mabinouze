@@ -87,7 +87,7 @@ class Round:
     def update(self):
         """Update round in database"""
         expires = self.times['expires'] \
-            if self.__locked is False \
+            if not self.__locked \
             else (self.times['round'] + timedelta(hours=6)).isoformat(timespec='minutes')
 
         conn = get_db()
@@ -105,8 +105,8 @@ class Round:
             self.description,
             self.times['round'].isoformat(timespec='minutes'),
             expires,
-            crypt(self.__passwords['organizer']),
-            crypt(self.__passwords['access']),
+            self.__passwords['organizer'],
+            self.__passwords['access'],
             str(self.uuid)
         ))
         conn.commit()
@@ -182,7 +182,6 @@ class Round:
         self.orders = Order.from_round(self.uuid)
         return self
 
-
     def verify_password(self, token):
         """Verify an organizer password"""
         return verify(base64urldecode(token), self.__passwords['organizer'])
@@ -194,3 +193,7 @@ class Round:
     def has_access_token(self):
         """Check if round requires an access token"""
         return self.__passwords['access'] is not None
+    
+    def is_locked(self):
+        """Check if round is locked"""
+        return self.__locked

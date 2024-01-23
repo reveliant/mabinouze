@@ -1,5 +1,7 @@
 """MaBinouze API /v1/round"""
 
+from datetime import datetime
+
 from werkzeug.exceptions import BadRequest, Forbidden, NotFound
 from flask import Blueprint, request
 
@@ -54,6 +56,24 @@ def post_round():
 
     event.create()
     return event.summary(), 201
+
+@routes.put('/round/<uuid:round_id>')
+@authentication_required
+def put_round(round_id):
+    """Update round"""
+    body = sanitized_json([], ['description', 'time'])
+    
+    event = get_round_instance(round_id)
+    verify_authorization(event.verify_password, request.authorization.token)
+
+    event.description = body['description']
+    event.times['round'] = datetime.fromisoformat(body['time'])
+    
+    if not event.is_locked() and event.times['round'] > event.times['expires']:
+        raise BadRequest("Requested time is after round expiration")
+
+    event.update()
+    return ""
 
 @routes.get('/search/<string:round_id>/details')
 @routes.get('/round/<uuid:round_id>/details')
