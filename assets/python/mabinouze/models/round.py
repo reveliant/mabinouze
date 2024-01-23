@@ -71,7 +71,7 @@ class Round:
         """Read a round from database"""
         conn = get_db()
         cur = conn.execute("""
-            SELECT round_id, name, description, time, expires, password, access_token
+            SELECT round_id, name, description, time, expires, password, access_token, locked
             FROM rounds
             WHERE round_id = ?
         """, (
@@ -119,7 +119,7 @@ class Round:
         """Read a round from database"""
         conn = get_db()
         cur = conn.execute("""
-            SELECT round_id, name, description, time, expires, password, access_token
+            SELECT round_id, name, description, time, expires, password, access_token, locked
             FROM rounds
             WHERE name = ?
         """, (
@@ -196,4 +196,4 @@ class Round:
     
     def is_locked(self):
         """Check if round is locked"""
-        return self.__locked
+        return self.__locked is True
