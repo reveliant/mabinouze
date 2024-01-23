@@ -52,9 +52,17 @@ const vueGlobals = {
     console.log("Settings updated");
   },
   validRoundName: function() {
-    console.log("Check round name")
     return this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/);
   },
+  roundedTime: function(simpleTime) {
+    let now = moment();
+    let time = moment(simpleTime, 'HH:mm');
+    if (time.isBefore(now)) {
+      // Time in past
+      time.add(1, 'd');
+    }
+    return time;
+},
   Status: {
     Waiting: 'Waiting',
     Found: 'Found',

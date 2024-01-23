@@ -16,18 +16,9 @@ export default {
     },
     computed: {
         hostname: () => (new URL(params.baseURL)).hostname,
-        roundTime() {
-            let now = moment();
-            let time = moment(this.time, 'HH:mm');
-            if (time.isBefore(now)) {
-                // Time in past
-                time.add(1, 'd');
-            }
-            return time;
-        },
         dateUntil() {
             let now = moment();
-            let until = moment(this.roundTime).add(6, 'h');
+            let until = moment(this.roundedTime(this.time)).add(6, 'h');
             return (until.isSame(now, 'date') ? '' : until.format('dddd ')) + until.format('LT')
         },
     },
@@ -59,7 +50,7 @@ export default {
                 axios.post(this.urls.round, {
                     name: this.id,
                     description: this.description,
-                    time: this.roundTime.toISOString(),
+                    time: this.roundedTime(this.time).toISOString(),
                     password: this.password,
                     access_token: (this.access_token != '') ? this.access_token : null,
                 }).then((response) => {
@@ -93,7 +84,7 @@ export default {
                     </div>
                     <div class="col-md-2">
                         <div class="form-floating">
-                            <input type="time" class="form-control" id="round-timetournee" placeholder="Heure de la tournée" v-model="time">
+                            <input type="time" class="form-control" id="round-time" placeholder="Heure de la tournée" v-model="time">
                             <label for="round-time">Heure de la tournée</label>
                         </div>
                     </div>
