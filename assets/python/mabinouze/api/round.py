@@ -84,7 +84,7 @@ def get_round_details(round_id):
 
     verify_authorization(event.verify_password, request.authorization.token)
 
-    return event.read_orders().details()
+    return event.read_orders(include_empty=True).details()
 
 @routes.get('/search/<string:round_id>/order')
 @routes.get('/round/<uuid:round_id>/order')

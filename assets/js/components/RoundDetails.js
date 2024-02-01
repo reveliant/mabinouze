@@ -3,12 +3,14 @@ import moment from 'moment';
 import RoundTitle from './RoundTitle.js'
 import Drink from './Drink.js'
 import NewDrink from './NewDrink.js'
+import NewOrder from './NewOrder.js'
 
 export default {
     components: {
         RoundTitle,
         Drink,
         NewDrink,
+        NewOrder,
     },
     data() {
       return {
@@ -159,6 +161,7 @@ export default {
             <div class="alert alert-primary" v-if="!Object.keys(tipplers).length">
                 Aucune commande actuellement
             </div>
+            <NewOrder :round="id"></NewOrder>
             <p class="text-end mt-3"><a :href="'/' + id + '/'" class="btn btn-primary">Retour au résumé de la commande</a></p>
         </article>
         <div v-if="status == Status.NotFound">

@@ -81,7 +81,7 @@ class Order:
             WHERE order_id = ?
         """, (
             self.tippler,
-            self.__password,
+            crypt(self.__password),
             str(self.uuid),
         ))
         conn.commit()
@@ -128,7 +128,7 @@ class Order:
         return cls(**res)
 
     @classmethod
-    def from_round(cls, round_id):
+    def from_round(cls, round_id, include_empty=False):
         """Read all orders for a given round from database"""
         orders = []
 
@@ -142,7 +142,7 @@ class Order:
         ))
         for res in cur.fetchall():
             order = cls(**res).read_drinks()
-            if len(order.drinks):
+            if len(order.drinks) or include_empty:
                 orders.append(order)
         return orders
 

@@ -177,9 +177,9 @@ class Round:
             "tipplers": tipplers
         }
 
-    def read_orders(self):
+    def read_orders(self, include_empty=False):
         """Populate round with orders"""
-        self.orders = Order.from_round(self.uuid)
+        self.orders = Order.from_round(self.uuid, include_empty)
         return self
 
     def verify_password(self, token):
