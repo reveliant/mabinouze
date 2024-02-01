@@ -11,6 +11,7 @@ export default {
         newDrink(event) {
             event.preventDefault()
             this.emitter.emit('addToOrder', {drink: this.name, order: this.order});
+            this.name = '';
             console.log(this.order)
         }
     },
