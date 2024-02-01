@@ -1,6 +1,6 @@
 import axios from 'axios';
-import moment from 'moment';
 import RoundTitle from './RoundTitle.js'
+import RoundUpdate from './RoundUpdate.js'
 import Drink from './Drink.js'
 import NewDrink from './NewDrink.js'
 import NewOrder from './NewOrder.js'
@@ -8,6 +8,7 @@ import NewOrder from './NewOrder.js'
 export default {
     components: {
         RoundTitle,
+        RoundUpdate,
         Drink,
         NewDrink,
         NewOrder,
@@ -21,8 +22,6 @@ export default {
         description: '',
         time: '',
         tipplers: {},
-        updatedDescription: '',
-        updatedTime: '',
         expires: '',
         error: ''
       }
@@ -52,16 +51,12 @@ export default {
             if (event) event.preventDefault();
             if (!this.validRoundName()) return;            
             axios.get(this.urls.getRoundDetails.replace('<id>', this.id), this.config()).then((response) => {
+                this.roundId = response.data.id;
                 this.description = response.data.description;
                 this.time = response.data.time;
+                this.expires = response.data.expires;
                 this.tipplers = response.data.tipplers;
                 this.status = this.Status.Found;
-
-                this.roundId = response.data.id;
-                this.updatedDescription = response.data.description;
-                this.updatedTime = moment(response.data.time).format('HH:mm');
-                this.expires = moment(response.data.expires);
-
                 sessionStorage.setItem(`admin:${this.id}`, access_token);
             }).catch((error) => {
                 switch (error.response.status) {
@@ -113,43 +108,15 @@ export default {
                 <p class="text-end accordion-collapse collapse show" data-bs-parent="#round-accordion" id="round-details">
                     <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#round-form">Modifier</button>
                 </p>
-                <form class="accordion-collapse collapse mt-3 mb-5 bg-secondary-subtle rounded p-3 pt-1" data-bs-parent="#round-accordion" id="round-form" @submit="submit">
-                    <div class="row mt-3">
-                        <div class="col-md-10">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="round-description" aria-describedby="round-description-help" placeholder="Description de la tournée" v-model="updatedDescription">
-                                <label for="round-description">Description de la tournée</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating">
-                                <input type="time" class="form-control" id="round-time" placeholder="Heure de la tournée" v-model="updatedTime">
-                                <label for="round-time">Heure de la tournée</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="form-text text-danger fw-bold text-end" v-if="isFuture">
-                        L'heure de la tournée ne peut être après son expiration ({{ expires.format('dddd LT') }}) !
-                    </p>
-                    <div class="row mt-3 d-none">
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="password" class="form-control" id="round-password" aria-describedby="round-password-help" placeholder="Mot de passe d'organisation">
-                                <label for="round-password">Mot de passe d'organisation</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="password" class="form-control" id="round-access-token" aria-describedby="round-access-token-help" placeholder="Mot de passe d'accès">
-                                <label for="round-access-token">Mot de passe d'accès (optionnel)</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-end mt-3">
-                        <button class="btn btn-outline-danger" data-bs-toggle="collapse" data-bs-target="#round-details">Abandonner</button>
-                        <input type="submit" class="btn btn-primary ms-2" data-bs-toggle="collapse" data-bs-target="#round-details" value="Enregistrer" />
-                    </div>
-                </form>
+                <RoundUpdate
+                    data-bs-parent="#round-accordion"
+                    id="round-form"
+                    :roundId="roundId"
+                    :description="description"
+                    :time="time"
+                    :expires="expires"
+                    :config="config()"
+                ></RoundUpdate>
             </div>
             <template v-for="tippler in tipplers">
                 <h3>{{ tippler.name }}</h3>
