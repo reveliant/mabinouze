@@ -6,9 +6,20 @@ export default {
     },
     computed: {
         day: function() {
+            /*
             let now = moment();
             let time = moment(this.date);
-            return time.isSame(now, 'date') ? "aujourd'hui" : time.format('dddd');
+            let day = time.isSame(now, 'date') ? "aujourd'hui" : time.format('dddd');
+            */
+            let day = moment(this.date).calendar(null, {
+                lastDay : '[hier]',
+                sameDay : '[aujourd\'hui]',
+                nextDay : '[demain]',
+                lastWeek : 'dddd [dernier]',
+                nextWeek : 'dddd [prochain]',
+                sameElse : 'dddd D MMM'
+            });
+            return day;
         },
         time: function() {
             return moment(this.date).format('LT');
