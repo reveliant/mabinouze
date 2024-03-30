@@ -44,9 +44,12 @@ export default {
                 this.emitter.emit('errorUpdateOrder', error)
             });
         },
+        reset(target) {
+            target.preventDefault();
+        }
     },
     template: `
-        <form class="accordion-collapse collapse mt-3 mb-5 bg-secondary-subtle rounded p-3 pt-1" @submit="submit">
+        <form class="accordion-collapse collapse mt-3 mb-5 bg-secondary-subtle rounded p-3 pt-1" @submit="submit" @reset="reset">
             <div class="row mt-3">
                 <div class="col-md-10">
                     <div class="form-floating">
@@ -79,7 +82,7 @@ export default {
                 </div>
             </div>
             <div class="text-end mt-3">
-                <button class="btn btn-outline-danger" data-bs-toggle="collapse" data-bs-target="#round-details">Abandonner</button>
+                <input type="reset" class="btn btn-outline-danger" data-bs-toggle="collapse" data-bs-target="#round-details" value="Abandonner" />
                 <input type="submit" class="btn btn-primary ms-2" data-bs-toggle="collapse" data-bs-target="#round-details" value="Enregistrer" />
             </div>
         </form>
