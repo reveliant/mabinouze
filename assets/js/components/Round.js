@@ -1,4 +1,5 @@
 import axios from 'axios';
+import NewRound from './NewRound.js'
 import RoundTitle from './RoundTitle.js'
 
 export default {
@@ -74,11 +75,19 @@ export default {
             <p class="text-end"><a :href="'/' + id + '/details'" class="btn btn-primary">Voir le détail de la commande</a></p>
         </article>
         <div v-if="status == Status.NotFound">
-            <h2>Oups !</h2>
-            <p>
-                La tournée demandée n'existe pas...
-                <a href="/">retourner à la page d'accueil</a>
-            </p>
+            <div class="collapse show new-round">
+                <h2>Oups !</h2>
+                <p>
+                    La tournée demandée n'existe pas...
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".new-round" aria-expanded="false" aria-controls="collapseExample">
+                        Créer cette tournée
+                    </button>
+                </p>
+            </div>
+            <div class="collapse new-round">
+                <h2>Créer la tournée <span class="text-primary font-monospace" v-text="id"></span></h2>
+                <NewRound  :create-id="id"></NewRound>
+            </div>
         </div>
         <div v-show="status == Status.NotAutenticated">
             <h2>Oups !</h2>

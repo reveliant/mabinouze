@@ -3,6 +3,9 @@ import moment from 'moment';
 import params from '@params';
 
 export default {
+    props: {
+        createId: String
+    },
     data() {
         return {
             id: '',
@@ -64,6 +67,12 @@ export default {
                 });
             }
         },
+    },
+    mounted() {
+        if(this.createId != undefined) {
+            console.log('mounted')
+            this.id = this.createId;
+        }
     },
     template: `
         <form class="mb-5" @submit="submit">
