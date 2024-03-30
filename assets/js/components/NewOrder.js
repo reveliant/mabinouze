@@ -60,7 +60,7 @@ export default {
                     </div>
                 </div>
                 <div class="col-md-2 d-flex">
-                    <input class="btn btn-outline-primary flex-fill" type="submit" value="Enregistrer" :disabled="!validUser"/>
+                    <input class="btn btn-outline-success flex-fill" type="submit" value="Ajouter" :disabled="!validUser"/>
                 </div>
             </div>
             <p class="form-text text-danger fw-bold mb-0" v-if="error" v-text="error"></p>

@@ -23,7 +23,7 @@ export default {
         time: '',
         tipplers: {},
         expires: '',
-        error: ''
+        edit: false,
       }
     },
     computed: {
@@ -49,7 +49,7 @@ export default {
         },
         update(event) {
             if (event) event.preventDefault();
-            if (!this.validRoundName()) return;            
+            if (!this.validRoundName()) return;
             axios.get(this.urls.getRoundDetails.replace('<id>', this.id), this.config()).then((response) => {
                 this.roundId = response.data.id;
                 this.description = response.data.description;
@@ -105,9 +105,15 @@ export default {
         <article v-if="status == Status.Found">
             <round-title :id="id" :description="description" :time="time"></round-title>
             <div class="accordion accordion-flush" id="round-accordion">
-                <p class="text-end accordion-collapse collapse show" data-bs-parent="#round-accordion" id="round-details">
-                    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#round-form">Modifier</button>
-                </p>
+                <div class="d-flex justify-content-between align-items-baseline">
+                    <span class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="edit-switch" v-model="edit">
+                        <label class="form-check-label" for="edit-switch">Éditer les commandes</label>
+                    </span>
+                    <p class="text-end accordion-collapse collapse show" data-bs-parent="#round-accordion" id="round-details">
+                        <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#round-form">Modifier</button>
+                    </p>
+                </div>
                 <RoundUpdate
                     data-bs-parent="#round-accordion"
                     id="round-form"
@@ -121,14 +127,14 @@ export default {
             <template v-for="tippler in tipplers">
                 <h3>{{ tippler.name }}</h3>
                 <ul class="list-group mb-4">
-                    <Drink v-for="drink in tippler.drinks" v-bind="drink" :config="config()"></Drink>
-                    <NewDrink :order="tippler.id"></NewDrink>
+                    <Drink v-for="drink in tippler.drinks" v-bind="drink" :edit="edit" :config="config()"></Drink>
+                    <NewDrink :order="tippler.id" v-show="edit"></NewDrink>
                 </ul>
             </template>
             <div class="alert alert-primary" v-if="!Object.keys(tipplers).length">
                 Aucune commande actuellement
             </div>
-            <NewOrder :round="id"></NewOrder>
+            <NewOrder :round="id" v-show="edit"></NewOrder>
             <p class="text-end mt-3"><a :href="'/' + id + '/'" class="btn btn-primary">Retour au résumé de la commande</a></p>
         </article>
         <div v-if="status == Status.NotFound">
