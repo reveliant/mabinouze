@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         addToOrder(msg) {
-            let drink = this.drinks.get(event.msg);
+            let drink = this.drinks.get(msg.drink);
             if (drink === undefined) {
                 if (!this.credentialsReady)
                     return new Promise();
