@@ -5,7 +5,7 @@
   */
 
 import {ref, createApp} from 'vue';
-import moment from 'moment';
+import {DateTime, Settings as luxonSettings} from 'luxon';
 import mitt from 'mitt';
 import {NewRound, SearchRound, Round, RoundDetails, MyOrder, Settings} from './components';
 import params from '@params';
@@ -52,17 +52,22 @@ const vueGlobals = {
     console.log("Settings updated");
   },
   validRoundName: function() {
-    return this.id.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/);
+    return this.id.match(/^[A-Za-z0-9\-]{4}[A-Za-z0-9\-]{0,251}$/);
   },
   roundedTime: function(simpleTime) {
-    let now = moment();
-    let time = moment(simpleTime, 'HH:mm');
-    if (time.isBefore(now)) {
+    let now = DateTime.now();
+    let time = DateTime.fromISO(simpleTime);
+    if (time < now) {
       // Time in past
       time.add(1, 'd');
     }
     return time;
-},
+  },
+  dayAndTime : function(isotime) {
+    let now = DateTime.now();
+    let time = DateTime.fromISO(isotime);
+    return (time.hasSame(now, 'day') ? '' : time.toFormat('cccc ')) + time.toFormat("'à' t")
+  },
   Status: {
     Waiting: 'Waiting',
     Found: 'Found',
@@ -73,7 +78,7 @@ const vueGlobals = {
 };
 
 window.addEventListener('load', function(){
-    moment.locale(window.navigator.language);
+    luxonSettings.defaultLocale = DateTime.now().resolvedLocaleOptions().locale;
     const app = createApp()
     .component('NewRound', NewRound)
     .component('SearchRound', SearchRound)

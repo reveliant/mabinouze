@@ -1,5 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
+import {DateTime} from 'luxon';
 import params from '@params';
 
 export default {
@@ -10,7 +10,7 @@ export default {
         return {
             id: '',
             description: '',
-            time: moment().add(1, 'h').minutes(0).format('HH:mm'),
+            time: DateTime.now().plus({ hours: 1 }).set({ minutes: 0 }).toFormat('HH:mm'),
             password: '',
             access_token: '',
             status: this.Status.Waiting,
@@ -20,9 +20,9 @@ export default {
     computed: {
         hostname: () => (new URL(params.baseURL)).hostname,
         dateUntil() {
-            let now = moment();
-            let until = moment(this.roundedTime(this.time)).add(6, 'h');
-            return (until.isSame(now, 'date') ? '' : until.format('dddd ')) + until.format('LT')
+            let now = DateTime.now();
+            let until = DateTime.fromISO(this.roundedTime(this.time)).plus({ hours: 6 });
+            return (until.hasSame(now, 'day') ? '' : until.toFormat('cccc ')) + until.toFormat('t')
         },
     },
     watch: {
@@ -53,7 +53,7 @@ export default {
                 axios.post(this.urls.round, {
                     name: this.id,
                     description: this.description,
-                    time: this.roundedTime(this.time).toISOString(),
+                    time: this.roundedTime(this.time).toISO(),
                     password: this.password,
                     access_token: (this.access_token != '') ? this.access_token : null,
                 }).then((response) => {
@@ -77,7 +77,7 @@ export default {
     template: `
         <form class="mb-5" @submit="submit">
             <div class="form-floating">
-                <input type="text" class="form-control" id="round-id" aria-describedby="round-id-help" pattern="[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}" minlength="4" maxlength="255" placeholder="Nom de la tournée" v-model.trim="id" required>
+                <input type="text" class="form-control" id="round-id" aria-describedby="round-id-help" pattern="[A-Za-z0-9\\-]{4}[A-Za-z0-9\\-]{0,251}" minlength="4" maxlength="255" placeholder="Nom de la tournée" v-model.trim="id" required>
                 <label for="round-id">Indique le nom de la tournée</label>
             </div>
             <div class="form-text" id="round-id-help">

@@ -2,3 +2,4 @@ resources/
 .hugo_build.lock
 __pycache__
 *.db
+public/

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
+import {DateTime} from 'luxon';
 
 export default {
     props: {
@@ -15,15 +15,15 @@ export default {
     data() {
         return {
             updatedDescription: this.description,
-            updatedTime: moment(this.time).format('HH:mm'),
+            updatedTime: DateTime.fromISO(this.time).toFormat('HH:mm'),
         }
     },
     computed: {
         isFuture: function() {
-            return this.roundedTime(this.time).isAfter(this.expires);
+            return this.roundedTime(this.time) > DateTime.fromISO(this.expires);
         },
         expiry: function() {
-            return moment(this.expires).format('dddd LT')
+            return DateTime.fromISO(this.expires).toFormat('cccc t')
         },
     },
     methods: {
@@ -31,7 +31,7 @@ export default {
             target.preventDefault();
             axios.put(this.urls.round + '/' +  this.roundId, {
                 description: this.updatedDescription,
-                time: this.roundedTime(this.updatedTime).toISOString(),
+                time: this.roundedTime(this.updatedTime).toISO(),
                 //password: this.password,
                 //access_token: (this.access_token != '') ? this.access_token : null,
             }, this.config).then((response) => {

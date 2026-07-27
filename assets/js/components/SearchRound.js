@@ -1,5 +1,4 @@
 import axios from 'axios';
-import moment from 'moment';
 
 export default {
     data() {
@@ -23,12 +22,10 @@ export default {
     watch: {
         id(value){
             this.id = value;
-            if (value.match(/^[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}$/)) {
+            if (value.match(/^[A-Za-z0-9\-]{4}[A-Za-z0-9\-]{0,251}$/)) {
                 axios.get(this.urls.getRound.replace('<id>', this.id)).then((response) => {
                     this.description = response.data.description;
-                    let now = moment();
-                    let time = moment(response.data.time);
-                    this.time = (time.isSame(now, 'date') ? '' : time.format('dddd ')) + time.format('[à] LT')
+                    this.time = this.dayAndTime(response.data.time);
                     this.found = true;
                     this.passwordProtected = false
                 }).catch((error) => {
@@ -55,9 +52,7 @@ export default {
                 headers: {'Authorization': `Bearer ${encodedPassword}`}
             }).then((response) => {
                 this.description = response.data.description;
-                let now = moment();
-                let time = moment(response.data.time);
-                this.time = (time.isSame(now, 'date') ? '' : time.format('dddd ')) + time.format('[à] LT')
+                this.time = this.dayAndTime(response.data.time);
                 this.found = true;
                 sessionStorage.setItem(`access:${this.id}`, encodedPassword)
             }).catch((error) => {})
@@ -67,7 +62,7 @@ export default {
         <form class="mb-5" @submit="submit">
             <div class="input-group">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="search-round" pattern="[A-Za-z0-9-]{4}[A-Za-z0-9-]{0,251}" minlength="4" maxlength="255" placeholder="Nom de la tournée" required v-model.trim="id">
+                    <input type="text" class="form-control" id="search-round" pattern="[A-Za-z0-9\\-]{4}[A-Za-z0-9]{0,251}" minlength="4" maxlength="255" placeholder="Nom de la tournée" required v-model.trim="id">
                     <label for="search-round">Indique le nom de la tournée</label>
                 </div>
                 <div class="form-floating" v-show="passwordProtected">

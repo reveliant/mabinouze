@@ -4,6 +4,7 @@ import RoundUpdate from './RoundUpdate.js'
 import Drink from './Drink.js'
 import NewDrink from './NewDrink.js'
 import NewOrder from './NewOrder.js'
+import { DateTime } from 'luxon';
 
 export default {
     components: {
@@ -28,7 +29,7 @@ export default {
     },
     computed: {
         isFuture: function() {
-            return this.roundedTime(this.updatedTime).isAfter(this.expires);
+            return this.roundedTime(this.updatedTime) > DateTime.fromISO(this.expires);
         }
     },
     methods: {
@@ -80,7 +81,7 @@ export default {
             if (this.status == this.Status.Found) {
                 axios.put(this.urls.round + '/' +  this.roundId, {
                     description: this.updatedDescription,
-                    time: this.roundedTime(this.updatedTime).toISOString(),
+                    time: this.roundedTime(this.updatedTime).toISO(),
                     //password: this.password,
                     //access_token: (this.access_token != '') ? this.access_token : null,
                 }, this.config()).then((response) => {
