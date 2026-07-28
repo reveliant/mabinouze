@@ -1,9 +1,13 @@
 [build]
   command = "hugo"
 
-[context.production.environment]
-  HUGO_ENV = "netlify"
+[build.environment]
+  HUGO_VERSION = "0.151.2"
   HUGO_ENABLEGITINFO = "true"
+  DART_SASS_VERSION = "1.71.1" 
+
+[[plugins]]
+  package = "@gethinode/netlify-plugin-dartsass"
 
 [context.deploy-preview.environment]
 
