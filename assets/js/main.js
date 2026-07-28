@@ -59,7 +59,7 @@ const vueGlobals = {
     let time = DateTime.fromISO(simpleTime);
     if (time < now) {
       // Time in past
-      time.add(1, 'd');
+      time.plus({ day: 1 });
     }
     return time;
   },
