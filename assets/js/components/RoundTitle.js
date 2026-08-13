@@ -75,7 +75,7 @@ export default {
                 </div>
             </div>
             <div class="round-qrcode">
-                <vue-qr :text="url" :size="150" :margin="16" logoSrc="/dropcap.svg" :logoMargin=5 class="rounded" />
+                <vue-qr :text="url" :size="150" :margin="16" :correctLevel="3" logoSrc="/dropcap.svg" :logoMargin=5 class="rounded" />
             </div> 
         </div>
         <h3 class="h1 mt-2 mb-3" v-text="description" v-if="!noQrcode"></h3>
