@@ -18,7 +18,7 @@ export default {
     template: `
         <li class="list-group-item">
             <form class="d-flex justify-content-between align-items-center" @submit="newDrink">
-                <input type="text" class="form-control flex-fill px-0 border-0" placeholder="Autre consommation" required v-model="name" />
+                <input type="text" class="form-control flex-fill px-0 border-0" placeholder="Autre consommation" name="new-drink" autocomplete="on" required v-model="name" />
                 <button class="btn btn-outline-secondary btn-circle ms-2"><i class="bi bi-plus"></i></button>
             </form>
         </li>

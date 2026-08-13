@@ -170,7 +170,7 @@ export default {
             </div>
             <div class="collapse new-round">
                 <h2>Créer la tournée <span class="text-primary font-monospace" v-text="id"></span></h2>
-                <NewRound  :create-id="id"></NewRound>
+                <NewRound :create-id="id"></NewRound>
             </div>
         </div>
         <div class="warning-msg" v-show="status == Status.NotAutenticated">
@@ -180,8 +180,9 @@ export default {
             <form class="mb-5" @submit="update">
                 <div class="input-group">
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="details-password" placeholder="Mot de passe d'organisation" v-model="password">
-                        <label for="details-password">Mot de passe d'organisation</label>
+                        <input type="hidden" name="round-username" autocomplete="section-admin username" :value="'admin:' + id">
+                        <input type="password" class="form-control" id="round-password" name="round-password" autocomplete="section-admin current-password" placeholder="Mot de passe d'organisation" v-model="password">
+                        <label for="round-password">Mot de passe d'organisation</label>
                     </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-lg bi-unlock2 me-1" aria-hidden="true"></i>

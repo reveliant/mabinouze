@@ -88,7 +88,7 @@ export default {
                 <div class="row mt-3">
                     <div class="col-md-9 col-xl-10">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="round-description" aria-describedby="round-description-help" placeholder="Description de la tournée" v-model="description">
+                            <input type="text" class="form-control" id="round-description" autocomplete="on" aria-describedby="round-description-help" placeholder="Description de la tournée" v-model="description">
                             <label for="round-description">Description de la tournée</label>
                         </div>
                     </div>
@@ -105,7 +105,8 @@ export default {
                 <div class="row mt-3">
                     <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="password" class="form-control" id="round-password" aria-describedby="round-password-help" placeholder="Mot de passe d'organisation" required v-model="password">
+                            <input type="hidden" name="round-username" autocomplete="section-admin username" :value="'admin:' + id">
+                            <input type="password" class="form-control" id="round-password" name="round-password" autocomplete="section-admin new-password" placeholder="Mot de passe d'organisation" required v-model="password">
                             <label for="round-password">Mot de passe d'organisation</label>
                         </div>
                         <div class="form-text" id="round-password-help">
@@ -115,7 +116,8 @@ export default {
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="password" class="form-control" id="round-access-token" aria-describedby="round-access-token-help" placeholder="Mot de passe d'accès" v-model="access_token">
+                            <input type="hidden" name="round-access-username" autocomplete="section-access-token username" :value="'access:' + id">
+                            <input type="password" class="form-control" id="round-access-token" name="round-access-token" autocomplete="section-access-token new-password" placeholder="Mot de passe d'accès" v-model="access_token">
                             <label for="round-access-token">Mot de passe d'accès (optionnel)</label>
                         </div>
                         <div class="form-text" id="round-access-token-help">

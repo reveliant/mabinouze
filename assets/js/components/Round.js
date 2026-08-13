@@ -160,8 +160,9 @@ export default {
             <form class="mb-5" @submit="update">
                 <div class="input-group">
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="round-password" placeholder="Mot de passe d'accès" v-model="password">
-                        <label for="round-password">Mot de passe participant</label>
+                        <input type="hidden" name="round-access-username" autocomplete="section-access-token username" :value="'access:' + id">
+                        <input type="password" class="form-control" id="round-access-token" name="round-access-token" autocomplete="section-access-token current-password" placeholder="Mot de passe d'accès" v-model="password">
+                        <label for="round-access-password">Mot de passe participant</label>
                     </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-lg bi-unlock2 me-1" aria-hidden="true"></i>

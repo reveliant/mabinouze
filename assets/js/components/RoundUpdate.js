@@ -53,7 +53,7 @@ export default {
             <div class="row mt-3">
                 <div class="col-md-10">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="round-description" aria-describedby="round-description-help" placeholder="Description de la tournée" v-model="updatedDescription">
+                        <input type="text" class="form-control" id="round-description" autocomplete="on" placeholder="Description de la tournée" v-model="updatedDescription">
                         <label for="round-description">Description de la tournée</label>
                     </div>
                 </div>
@@ -70,13 +70,15 @@ export default {
             <div class="row mt-3 d-none">
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="round-password" aria-describedby="round-password-help" placeholder="Mot de passe d'organisation">
+                        <input type="hidden" name="round-username" autocomplete="section-admin username" :value="'admin:' + roundId">
+                        <input type="password" class="form-control" id="round-password" name="round-password" autocomplete="section-admin current-password" placeholder="Mot de passe d'organisation">
                         <label for="round-password">Mot de passe d'organisation</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="round-access-token" aria-describedby="round-access-token-help" placeholder="Mot de passe d'accès">
+                        <input type="hidden" name="round-access-username" autocomplete="section-access-token username" :value="'admin:' + roundId">
+                        <input type="password" class="form-control" id="round-access-token" name="round-access-token" autocomplete="section-access-token current-password" placeholder="Mot de passe d'accès">
                         <label for="round-access-token">Mot de passe d'accès (optionnel)</label>
                     </div>
                 </div>
