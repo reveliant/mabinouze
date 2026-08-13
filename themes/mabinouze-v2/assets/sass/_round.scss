@@ -14,7 +14,7 @@
 	background-color: mix($foam, $foam-dark);
 	border: 1px solid var(--border-color);
 
-	@include media-breakpoint-up(md) {
+	@include media-breakpoint-up(sm) {
 		grid-template-areas:
 			"motto motto qrcode"
 			"title time time";
@@ -130,7 +130,7 @@
 	.qrcode {
 		@extend .rounded;
 		aspect-ratio: 1 / 1;
-		min-width: 150px;
+		width: 150px;
 	}
 
 	.text {
