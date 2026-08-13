@@ -121,16 +121,16 @@ export default {
             <div class="alert alert-warning" v-if="!drinks.length">
                 Aucune commande actuellement
             </div>
-            <div class="d-flex align-items-center mb-5">
-                <span class="avatar text-dark me-2"><i class="bi bi-people"></i></span>
-                <p class="flex-fill mb-0 span-nowrap">
+            <footer class="round-footer">
+                <span class="avatar"><i class="bi bi-people"></i></span>
+                <p class="counter">
                     <span class="d-none d-md-inline">Total :</span> <span><b>{{ total.drinks }}</b> consommation{{ total.drinks > 1 ? 's' : ''}}</span> <span>pour <b>{{ total.tipplers }}</b> assoifé{{ total.tipplers > 1 ? 's' : ''}}</span>
                 </p>
-                <a :href="'/' + id + '/details'" class="btn btn-primary text-nowrap">
+                <a :href="'/' + id + '/details'" class="btn btn-primary">
                     <i class="bi bi-search me-1" aria-hidden="true"></i>
                     Voir le détail de la commande
                 </a>
-            </div>
+            </footer>
             <h3>Ma commande</h3>
             <my-order></my-order>
         </article>

@@ -150,7 +150,7 @@ export default {
             <p class="text-end mt-3">
                 <a :href="'/' + id + '/'" class="btn btn-primary">
                     <i class="bi bi-lg bi-arrow-left-circle me-1" aria-hidden="true"></i>
-                    Retour au résumé de la commande
+                    Résumé de la commande
                 </a>
             </p>
         </article>

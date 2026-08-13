@@ -1,9 +1,7 @@
 .round-header {
 	display: grid;
-	grid-template-areas:
-		"motto motto qrcode"
-		"title time time";
-	grid-template-columns: 2fr 1fr 1fr;
+	grid-template-areas: "motto" "qrcode" "title" "time";
+	grid-template-columns: 1fr;
 	align-items: stretch;
 	--gap: 2em;
 	column-gap: var(--gap);
@@ -15,6 +13,13 @@
 	--border-color: #{mix($foam-dark, $hop, 90%)};
 	background-color: mix($foam, $foam-dark);
 	border: 1px solid var(--border-color);
+
+	@include media-breakpoint-up(md) {
+		grid-template-areas:
+			"motto motto qrcode"
+			"title time time";
+		grid-template-columns: 2fr 1fr 1fr;
+	} 
 
 	@include media-breakpoint-up(lg) {
 		grid-template-areas: "motto qrcode title time";
@@ -88,6 +93,7 @@
 		@extend .font-handwritten;
 		@extend .fs-5;
 		transform: rotate(-1deg) translateY(-.75em);
+		margin-bottom: -.75em;
 	}
 }
 
@@ -131,5 +137,61 @@
 		@extend .font-handwritten;
 		@extend .fs-5;
 		transform: rotate(-1deg);
+	}
+}
+
+.calendar {
+    --calendar-color: var(--bs-dark);
+    --calendar-text: var(--bs-white);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    border: 2px solid var(--calendar-color);
+    border-radius: var(--bs-border-radius);
+    font-size: 1rem;
+
+    &-day {
+        padding: .5ex 1ex;
+        color: var(--calendar-text);
+        background-color: var(--calendar-color);
+        border-top-left-radius: calc(.5*var(--bs-border-radius));
+        border-top-right-radius: calc(.5*var(--bs-border-radius));
+    }
+    &-time {
+        padding: .5ex 1ex;
+        color: var(--calendar-color);
+        font-size: 1.75em;
+    }
+}
+
+.round-footer {
+	display: grid;
+	grid-template-areas: "icon label" "button button";
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	@extend .gap-2;
+	@extend .mb-5;
+
+	@include media-breakpoint-up(md) {
+		grid-template-areas: "icon label button";
+		grid-template-columns: auto 1fr auto;
+	} 
+
+	.avatar {
+		grid-area: icon;
+		color: var(--bs-dark);
+	}
+	
+	.counter {
+		grid-area: label;
+		@extend .span-nowrap;
+		@extend .flex-fill;
+		margin-bottom: 0;
+	};
+
+	.btn {
+		grid-area: button;
+		//text-wrap: nowrap;
 	}
 }

@@ -64,31 +64,6 @@ b, strong {
     }
 }
 
-.calendar {
-    --calendar-color: var(--bs-dark);
-    --calendar-text: #fff;
-    display: inline-flex;
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-    border: 2px solid var(--calendar-color);
-    border-radius: var(--bs-border-radius);
-    font-size: 1rem;
-
-    &-day {
-        padding: .5ex 1ex;
-        color: var(--calendar-text);
-        background-color: var(--calendar-color);
-        border-top-left-radius: calc(.5*var(--bs-border-radius));
-        border-top-right-radius: calc(.5*var(--bs-border-radius));
-    }
-    &-time {
-        padding: .5ex 1ex;
-        color: var(--calendar-color);
-        font-size: 1.75em;
-    }
-}
-
 .avatar {
     @extend .rounded-circle;
     background-color: $foam-dark;

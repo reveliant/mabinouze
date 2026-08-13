@@ -164,7 +164,8 @@
 	display: grid;
 	align-items: center;
 	grid-template-columns: 1fr;
-	gap: 3em;
+	--gap: 2em;
+	gap: var(--gap);
 	font-size: .9rem;
 	font-weight: 400;
 	border: 1px solid change-color($white, $alpha: .25);
@@ -173,14 +174,13 @@
 	@extend .rounded-4;
 
 	@include media-breakpoint-up(md) {
-		gap: 4em;
+		--gap: 4em;
 		align-items: baseline;
 		grid-template-columns: repeat(3, 1fr);
 		font-size: .9rem;
 	}
 
 	@include media-breakpoint-up(xl) {
-		gap: 4em;
 		align-items: center;
 	}
 }
@@ -212,13 +212,13 @@
 }
 
 .prevention-item+.prevention-item {
-	margin: -2em 0 0 0 !important;
-	padding: 2em 0 0 0 !important;
+	margin: calc(-0.5 * var(--gap)) 0 0 0 !important;
+	padding: calc(0.5 * var(--gap)) 0 0 0 !important;
 	border-top: 1px solid change-color($white, $alpha: .35);
 
 	@include media-breakpoint-up(md) {
-		margin: 0 0 0 -2em !important;
-		padding: 0 0 0 2em !important;
+		margin: 0 0 0 calc(-0.5 * var(--gap)) !important;
+		padding: 0 0 0 calc(0.5 * var(--gap)) !important;
 		border-top: none;
 		border-left: 1px solid change-color($white, $alpha: .35);
 	}
