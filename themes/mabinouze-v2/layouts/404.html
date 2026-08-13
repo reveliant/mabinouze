@@ -1,0 +1,16 @@
+{{ define "main" }}
+	<main class="flex-fill page-error">
+		<div class="container-md">
+			<div class="warning-msg">
+				<div class="icon">🏝️</div>
+				<h4>C'est un peu vide par ici !</h4>
+				<p>Le lien que tu as suivi est peut-être rompu...</p>
+				<p>
+					<a  href="{{ .Site.Home.Permalink }}" class="btn btn-primary">
+						Revenir à {{ .Site.Title }}
+					</a>
+				</p>
+			</div>
+		</div>
+	</main>
+{{ end }}

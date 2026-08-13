@@ -44,8 +44,8 @@ export default {
         },
     },
     template: `
-        <form class="mt-3 mb-5 bg-secondary-subtle rounded p-3" @submit="save">
-            <h3>Nouvel assoiffé</h3>
+        <form class="mt-3 mb-5 rounded bg-light p-3" @submit="save">
+            <h3 class="mt-0">Nouvel assoiffé</h3>
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="form-floating">

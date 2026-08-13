@@ -1,9 +1,9 @@
-baseURL = "http://mabinouze.fr/"
-languageCode = "fr-fr"
+baseURL = "https://mabinouze.fr/"
+locale = "fr-fr"
 title = "Ma binouze"
 enableInlineShortcodes = true
 disableKinds = ['taxonomy', 'term', 'RSS']
-theme = "mabinouze-v1"
+theme = "mabinouze-v2"
 
 [params]
 icon = "🍺"
@@ -16,3 +16,6 @@ unsafe = true
 [markup.goldmark.parser.attribute]
 block = true
 title = true
+
+[security]
+allowContent = ['text/html', 'text/markdown']

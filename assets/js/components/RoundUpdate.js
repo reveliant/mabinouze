@@ -49,7 +49,7 @@ export default {
         }
     },
     template: `
-        <form class="accordion-collapse collapse mt-3 mb-5 bg-secondary-subtle rounded p-3 pt-1" @submit="submit" @reset="reset">
+        <form class="accordion-collapse collapse rounded bg-light mt-3 mb-5 p-3 pt-1" @submit="submit" @reset="reset">
             <div class="row mt-3">
                 <div class="col-md-10">
                     <div class="form-floating">

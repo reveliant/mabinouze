@@ -1,0 +1,22 @@
+{
+  "name": "mabinouze",
+  "version": "1.0.0",
+  "description": "Round organization between friends at your preferred pub",
+  "main": "assets/js/main.js",
+  "scripts": {
+    "test": "hugo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reveliant/mabinouze.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reveliant/mabinouze/issues"
+  },
+  "homepage": "https://github.com/reveliant/mabinouze#readme",
+  "devDependencies": {
+    "@gethinode/netlify-plugin-dartsass": "^0.3.0"
+  }
+}

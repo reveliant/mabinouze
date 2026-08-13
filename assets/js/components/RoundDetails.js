@@ -76,7 +76,6 @@ export default {
             })
         },
         submit(target) {
-            console.log("Submit")
             target.preventDefault();
             if (this.status == this.Status.Found) {
                 axios.put(this.urls.round + '/' +  this.roundId, {
@@ -104,7 +103,7 @@ export default {
     },
     template: `
         <article v-if="status == Status.Found">
-            <round-title :id="id" :description="description" :time="time"></round-title>
+            <round-title :id="id" :description="description" :datetime="time" no-qrcode></round-title>
             <div class="accordion accordion-flush" id="round-accordion">
                 <div class="d-flex justify-content-between align-items-baseline">
                     <span class="form-check form-switch">
@@ -112,7 +111,10 @@ export default {
                         <label class="form-check-label" for="edit-switch">Éditer les commandes</label>
                     </span>
                     <p class="text-end accordion-collapse collapse show" data-bs-parent="#round-accordion" id="round-details">
-                        <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#round-form">Modifier</button>
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#round-form">
+                            <i class="bi bi-pencil me-1" aria-hidden="true"></i>
+                            Modifier
+                        </button>
                     </p>
                 </div>
                 <RoundUpdate
@@ -126,34 +128,65 @@ export default {
                 ></RoundUpdate>
             </div>
             <template v-for="tippler in tipplers">
-                <h3>{{ tippler.name }}</h3>
-                <ul class="list-group mb-4">
+                <div class="card border border-light bg-white mb-2 p-3 bg-white d-flex flex-row">
+                    <div class="flex-shrink-0">
+                        <div class="avatar">{{ tippler.name[0] }}</div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="d-flex align-items-center">
+                            <h4>{{ tippler.name }}</h4>
+                        </div>
+                        <ul class="list-unstyled mb-0">
                     <Drink v-for="drink in tippler.drinks" v-bind="drink" :edit="edit" :config="config()"></Drink>
                     <NewDrink :order="tippler.id" v-show="edit"></NewDrink>
                 </ul>
+                    </div>
+                </div>
             </template>
-            <div class="alert alert-primary" v-if="!Object.keys(tipplers).length">
+            <div class="alert alert-warning" v-if="!Object.keys(tipplers).length">
                 Aucune commande actuellement
             </div>
             <NewOrder :round="id" v-show="edit"></NewOrder>
-            <p class="text-end mt-3"><a :href="'/' + id + '/'" class="btn btn-primary">Retour au résumé de la commande</a></p>
+            <p class="text-end mt-3">
+                <a :href="'/' + id + '/'" class="btn btn-primary">
+                    <i class="bi bi-lg bi-arrow-left-circle me-1" aria-hidden="true"></i>
+                    Retour au résumé de la commande
+                </a>
+            </p>
         </article>
         <div v-if="status == Status.NotFound">
-            <h2>Oups !</h2>
-            <p>
-                La tournée demandée n'existe pas...
-                <a href="/">retourner à la page d'accueil</a>
-            </p>
+            <div class="collapse show new-round">
+                <div class="warning-msg">
+                    <div class="icon">🍻</div>
+                    <h4>Oups !</h4>
+                    <p>La tournée demandée n'existe pas...</p>
+                    <p>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".new-round" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="bi bi-lg bi-arrow-right-short me-1" aria-hidden="true"></i>
+                            Créer cette tournée
+                        </button>
+                    </p>
+                </div>
+            </div>
+            <div class="collapse new-round">
+                <h2>Créer la tournée <span class="text-primary font-monospace" v-text="id"></span></h2>
+                <NewRound  :create-id="id"></NewRound>
+            </div>
         </div>
-        <div v-show="status == Status.NotAutenticated">
-            <h2>Oups !</h2>
+        <div class="warning-msg" v-show="status == Status.NotAutenticated">
+            <div class="icon">✋</div>
+            <h4>Est-ce que c'est bien toi le patron ?</h4>
+            <p>Cette opération nécessite une authentification</p>
             <form class="mb-5" @submit="update">
                 <div class="input-group">
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="details-password" placeholder="Mot de passe d'accès" v-model="password">
-                        <label for="details-password">Cette opération nécessite une authentification</label>
+                        <input type="password" class="form-control" id="details-password" placeholder="Mot de passe d'organisation" v-model="password">
+                        <label for="details-password">Mot de passe d'organisation</label>
                     </div>
-                    <input type="submit" class="btn btn-primary" value="Valider">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-lg bi-unlock2 me-1" aria-hidden="true"></i>
+                        Gérer
+                    </button>
                 </div>
             </form>
         </div>

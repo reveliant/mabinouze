@@ -1,0 +1,135 @@
+.round-header {
+	display: grid;
+	grid-template-areas:
+		"motto motto qrcode"
+		"title time time";
+	grid-template-columns: 2fr 1fr 1fr;
+	align-items: stretch;
+	--gap: 2em;
+	column-gap: var(--gap);
+	row-gap: calc(var(--gap) / 2);
+	@extend .mb-4;
+	@extend .p-3;
+	@extend .rounded;
+	@extend .rounded-3;
+	--border-color: #{mix($foam-dark, $hop, 90%)};
+	background-color: mix($foam, $foam-dark);
+	border: 1px solid var(--border-color);
+
+	@include media-breakpoint-up(lg) {
+		grid-template-areas: "motto qrcode title time";
+		grid-template-columns: 1.5fr auto 1fr 1fr;
+	} 
+}
+
+@mixin round-border($breakpoint: lg) {
+	position: relative;
+	--line-thickness: 2px;
+	--line-offset: calc((var(--gap) + var(--line-thickness)) / 2);
+
+	@include media-breakpoint-up($breakpoint) {
+		&::before {
+			content: '';
+			position: absolute;
+			z-index: 1;
+
+			block-size: 100%;
+			inset-block-start: 0;
+			inset-inline-start: calc(var(--line-offset) * -1);
+			border-inline-start: 3px dotted var(--border-color);
+		}
+	}
+}
+
+.round-label {
+	margin-bottom: .25rem;
+	text-align: center;
+}
+
+.round-cartouche {
+	@extend .rounded;
+	color: $black;
+	background-color: $foam-dark;
+	@extend .py-1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1ex;
+	height: 3rem;
+
+	&.placeholder {
+		background-color: currentColor;
+	}
+}
+
+.round-motto {
+	grid-area: motto;
+	justify-self: start;
+	display: grid;
+	grid-template-areas: "icon title" ". motto";
+	align-items: center;
+
+	.icon {
+		grid-area: icon;
+		@extend .hero-icon;
+	}
+
+	.title {
+		grid-area: title;
+		font-weight: bold;
+		text-wrap: nowrap;
+		@extend .fs-4;
+		margin-bottom: 0;
+	}
+
+	.motto {
+		grid-area: motto;
+		align-self: self-start;
+		@extend .font-handwritten;
+		@extend .fs-5;
+		transform: rotate(-1deg) translateY(-.75em);
+	}
+}
+
+.round-title {
+	grid-area: title;
+	align-content: center;
+
+	.round-cartouche {
+		@extend .font-monospace;
+		@extend .fs-5;
+		@extend .my-0;
+	}
+}
+
+.round-time {
+	@include round-border(sm);
+	grid-area: time;
+	align-content: center;
+
+	.round-catouche {
+		font-size: 1.25rem;
+		@extend .gap-2;
+		@extend .mb-0;
+	}
+}
+
+.round-qrcode {
+	grid-area: qrcode;
+	justify-self: center;
+	display: flex;
+	align-items: center;
+	@extend .gap-3;
+
+	.qrcode {
+		@extend .rounded;
+		aspect-ratio: 1 / 1;
+		min-width: 150px;
+	}
+
+	.text {
+		@extend .font-handwritten;
+		@extend .fs-5;
+		transform: rotate(-1deg);
+	}
+}

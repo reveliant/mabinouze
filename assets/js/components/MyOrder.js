@@ -110,20 +110,27 @@ export default {
         this.update();
     },
     template: `
-        <ul v-show="[Status.Found, Status.NotFound].includes(status)" class="list-group mb-4">
-            <li class="list-group-item list-group-item-primary" v-if="status === Status.NotFound">
+        <ul v-show="[Status.Found, Status.NotFound].includes(status)" class="card border border-light bg-white p-3 list-unstyled mb-4">
+            <li class="alert alert-warning" v-if="status === Status.NotFound">
                 Il n'y a actuellement aucune commande à ton nom.
             </li>
-            <Drink v-for="[name, drink] in drinks" v-bind="drink" :config="config()"></Drink>
-            <NewDrink></NewDrink>
+            <Drink class="ps-1" v-for="[name, drink] in drinks" v-bind="drink" :config="config()"></Drink>
+            <NewDrink class="ps-1"></NewDrink>
         </ul>
-        <div class="alert alert-primary" v-if="status === Status.NotAuthorized">
+        <div class="alert alert-danger" v-if="status === Status.NotAuthorized">
             Ton nom est déjà utilisé par un homonyme dans une commande.
             <a href="#" class="alert-link" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">Changer les paramètres</a>
         </div>
-        <div class="alert alert-primary py-2" v-show="!credentialsReady">
-            Indique ton prénom et un mot de passe avant de passer des commandes !
-            <a href="#" class="alert-link" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">Paramétrer maintenant</a>
+        <div class="warning-msg" v-show="!credentialsReady">
+            <div class="icon">🥸</div>
+            <h4>Mais qui es-tu ?</h4>
+            <p>Indique ton prénom et un mot de passe avant de passer des commandes !</p>
+            <p>
+                <a href="#" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">
+                    <i class="bi bi-person-bounding-box me-1" aria-hidden="true"></i>
+                    Paramétrer maintenant
+                </a>
+            </p>
         </div>
     `
 }

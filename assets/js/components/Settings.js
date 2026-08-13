@@ -30,7 +30,10 @@ export default {
                 </div>
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" value="Enregistrer"/>
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-floppy me-1" aria-hidden="true"></i>
+                    Enregistrer
+                </button>
             </div>
         </form>
     `

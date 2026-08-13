@@ -1,0 +1,12 @@
+{{ define "main" }}
+	<main class="container-md flex-fill mt-4 page-main">
+		<h1>{{ .Title }}</h1>
+		<aside>
+			<h4>Sommaire</h4>
+			{{ .TableOfContents }}
+		</aside>
+		<div class="page-content">
+			{{ .Content }}
+		</div>
+	</main>
+{{ end }}
