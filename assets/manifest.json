@@ -1,0 +1,31 @@
+{
+    "name": "{{ .Site.Title }}",
+    "short_name": "{{ .Site.Title }}",
+    "description": "{{ .Site.Params.description }}",
+    "background_color": "#ffb100",
+    "theme_color": "#ffb100",
+    "start_url": "/",
+    "dir": "ltr",
+    "scope": "{{ .Site.BaseURL }}",
+    "lang": "{{ .Site.Language }}",
+    "orientation": "portrait",
+    "display": "standalone",
+    "display_override": [
+        "window-controls-overlay",
+        "standalone",
+        "minimal-ui",
+        "browser"
+    ],
+    "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/mask.svg",
+          "sizes": "any",
+          "purpose": "monochrome"
+        }
+    ]
+}

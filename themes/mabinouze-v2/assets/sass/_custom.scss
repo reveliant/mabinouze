@@ -1,0 +1,272 @@
+/*!
+ * Ma Binouze
+ * Bootstrap 5 custom theme
+ */
+
+// ============================================================================
+// Couleurs personnalisées
+// ============================================================================
+
+$beer:          #ffb100;
+$beer-light:    #ffcb4d;
+$beer-dark:     #e08d00;
+$pub:           #1e1e1e; //#25272c;
+$foam:          #fff6e6;
+$foam-dark:     #fcead0;
+$hop:           #8b5e34;
+$cream:         #f7f1e6;
+$chalk:         #e6e1da;
+$stone:         #b8b1a6;
+
+// ============================================================================
+// Palette
+// ============================================================================
+
+$primary:       $beer;
+$secondary:     $chalk; //#2f2c29;
+$success:       #3ba66b;
+$info:          #2d7d7d;
+$warning:       #ffc857;
+$danger:        #e84c3d;
+$light:         $foam-dark;
+$dark:          $pub;
+
+$white:         #ffffff;
+$black:         #111111;
+
+$body-bg:       $foam;
+$body-color:    #232323;
+
+$border-color:  #ece3d8;
+
+
+// ============================================================================
+// Typography
+// ============================================================================
+
+$font-size-base: 1.2rem;
+$font-family-sans-serif: Outfit, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+$headings-font-weight: 700;
+
+$font-weight-normal: 300;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-base:1.25;
+
+$lead-font-size: $font-size-base * 1.5;
+$lead-font-weight: 300;
+
+
+// ============================================================================
+// Border radius
+// ============================================================================
+
+$border-radius:             .75rem;
+$border-radius-sm:          .5rem;
+$border-radius-lg:          1rem;
+$border-radius-xl:          1.5rem;
+$border-radius-xxl:         2rem;
+
+$btn-border-radius:         .85rem;
+$card-border-radius:        1rem;
+$form-select-border-radius: .75rem;
+$input-border-radius:       .75rem;
+
+
+// ============================================================================
+// Cards
+// ============================================================================
+
+$card-bg:                   white;
+$card-border-width:         0;
+$card-box-shadow:           0 8px 30px rgba(30,31,36,.05);
+
+
+// ============================================================================
+// Buttons
+// ============================================================================
+
+$btn-padding-y:             .8rem;
+$btn-padding-x:             1.5rem;
+$btn-font-weight:           400;
+$btn-box-shadow:            0 8px 20px rgba(247,166,0,.25);
+$btn-focus-box-shadow:      0 0 0 .25rem rgba(247,166,0,.25);
+
+
+// ============================================================================
+// Inputs
+// ============================================================================
+
+$input-bg:                  white;
+$input-border-width:        1px;
+$input-border-color:        #E7DED2;
+
+$input-focus-border-color:  $primary;
+$input-focus-box-shadow:    0 0 0 .2rem rgba(247,166,0,.18);
+
+
+// ============================================================================
+// Navbar
+// ============================================================================
+
+$navbar-dark-bg:            $dark;
+$navbar-dark-color:         white;
+$navbar-dark-hover-color:   $primary;
+
+
+// ============================================================================
+// Links
+// ============================================================================
+
+$link-color:                $beer-dark;
+$link-hover-color:          $pub;
+
+
+// ============================================================================
+// Dropdown
+// ============================================================================
+
+$dropdown-border-width:     0;
+$dropdown-border-radius:    1rem;
+$dropdown-box-shadow:       0 15px 35px rgba(0,0,0,.08);
+
+
+// ============================================================================
+// Modal
+// ============================================================================
+
+$modal-content-border-width:    0;
+$modal-content-border-radius:   1.25rem;
+
+
+// ============================================================================
+// Toast
+// ============================================================================
+
+$toast-border-width:        0;
+$toast-border-radius:       1rem;
+
+
+// ============================================================================
+// Progress
+// ============================================================================
+
+$progress-bg:           #F2E7D8;
+$progress-bar-bg:       $primary;
+
+
+// ============================================================================
+// Accordion
+// ============================================================================
+
+$accordion-border-width:        0;
+$accordion-border-radius:       1rem;
+$accordion-button-active-bg:    #FFF3DB;
+$accordion-button-active-color: $dark;
+
+
+// ============================================================================
+// Tables
+// ============================================================================
+
+$table-bg:              white;
+$table-border-color:    #EFE8DF;
+$table-hover-bg:        #FFF6E6;
+
+
+// ============================================================================
+// Utilities personnalisées
+// ============================================================================
+
+.bg-cream {
+	background:         $cream;
+}
+
+.bg-chalk {
+	background:         $chalk;
+}
+
+.bg-stone {
+	background:         $stone;
+}
+
+.text-beer {
+	color:              $primary;
+}
+
+.text-hop {
+	color:              $hop;
+}
+
+.border-beer {
+	border-color:       $primary !important;
+}
+
+.shadow-soft {
+	box-shadow:         0 12px 30px rgba(0,0,0,.05);
+}
+
+.shadow-beer {
+	box-shadow:         0 10px 30px rgba(247,166,0,.18);
+}
+
+.glass-card{
+	background:         rgba(255,255,255,.75);
+	backdrop-filter:    blur(18px);
+}
+
+
+// ============================================================================
+// Dégradés
+// ============================================================================
+
+.bg-gradient-beer {
+	background:
+	linear-gradient(
+		135deg,
+		#FFD36B 0%,
+		#F7A600 45%,
+		#E08D00 100%
+	);
+}
+
+.bg-gradient-dark {
+	background:
+	linear-gradient(
+		180deg,
+		#2B2D33,
+		#1E1F24
+	);
+}
+
+.bg-gradient-hero {
+	background:
+	radial-gradient(circle at top right,#FFE5A8 0%,transparent 40%),
+	linear-gradient(180deg,#FFFDF9,#FFF5E7);
+}
+
+// ============================================================================
+// Fusion
+// ============================================================================
+
+@import 'bootstrap/functions';
+@import 'bootstrap/variables';
+@import 'bootstrap/variables-dark';
+$custom-colors: (
+	"beer": $beer,
+	"beer-light": $beer-light,
+	"beer-dark": $beer-dark,
+	"pub": $pub,
+	"foam": $foam,
+	"foam-dark": $foam-dark,
+	"hop": $hop,
+	"cream": $cream,
+	"chalk": $chalk,
+	"stone": $stone,
+);
+
+// Merge the maps
+$theme-colors: map-merge($theme-colors, $custom-colors);

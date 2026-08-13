@@ -30,11 +30,11 @@ export default {
         },
     },
     template: `
-        <li class="list-group-item d-flex justify-content-between align-items-center">
+        <li class="d-flex justify-content-between align-items-center mb-2">
+            <span class="me-2">{{ quantity }}×</span>
             <span class="flex-fill">{{ name }}</span>
-            <span class="badge bg-danger rounded-pill" v-if="quantity > 1">{{ quantity }}</span>
-            <button class="list-group-item-add btn btn-danger badge ms-3" @click="remove()" v-show="edit">&ndash;</button>
-            <button class="list-group-item-add btn btn-success badge ms-1" @click="add()" v-show="edit">+</button>
+            <button class="btn btn-outline-primary btn-circle ms-3" @click="remove()" v-show="edit"><i class="bi bi-dash"></i></button>
+            <button class="btn btn-outline-primary btn-circle ms-2" @click="add()" v-show="edit"><i class="bi bi-plus"></i></button>
         </li>
     `
 }

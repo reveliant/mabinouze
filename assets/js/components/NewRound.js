@@ -29,9 +29,10 @@ export default {
         id: function(value) {
             this.id = value;
             this.error = null;
-            this.status = this.Status.Waiting
+            this.status = this.Status.Waiting;
 
             if (!this.validRoundName()) return;
+
             axios.head(this.urls.getRound.replace('<id>', this.id)).then((response) => {
                 this.status = this.Status.Found;
             }).catch((error) => {
@@ -81,17 +82,17 @@ export default {
                 <label for="round-id">Indique le nom de la tournée</label>
             </div>
             <div class="form-text" id="round-id-help">
-                Le nom de la tournée doit faire au moins 4 caractères (chiffres ou lettres non accentuées, tiret possible à partir du 5<sup>è</sup> caractère)
+                4 caractères minimum : chiffres ou lettres non accentuées, tiret possible à partir du 5<sup>è</sup> caractère
             </div>
-            <template v-if="status == Status.NotFound">
+            <template v-if="status != Status.Found">
                 <div class="row mt-3">
-                    <div class="col-md-10">
+                    <div class="col-md-9 col-xl-10">
                         <div class="form-floating">
                             <input type="text" class="form-control" id="round-description" aria-describedby="round-description-help" placeholder="Description de la tournée" v-model="description">
                             <label for="round-description">Description de la tournée</label>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3 col-xl-2">
                         <div class="form-floating">
                             <input type="time" class="form-control" id="round-time" placeholder="Heure de la tournée" v-model="time">
                             <label for="round-time">Heure de la tournée</label>
@@ -122,8 +123,8 @@ export default {
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-md-10">
+                <div class="row mt-3 row-gap-3">
+                    <div class="col-lg-8 col-xl-9">
                         <div class="alert alert-primary mb-0">
                             Le lien à communiquer aux assoifés sera
                             <a :href="'/' + id" class="fw-bold">{{ hostname }}/{{ id }}</a><br/>
@@ -131,13 +132,23 @@ export default {
                             <strong>{{ dateUntil }}</strong>
                         </div>
                     </div>
-                    <div class="col-md-2 d-flex align-items-stretch">
-                        <input type="submit" class="btn btn-primary flex-fill" value="Créer la tournée">
+                    <div class="col-lg-4 col-xl-3 d-flex align-items-stretch">
+                        <button type="submit" class="btn btn-primary text-nowrap flex-fill">
+                            Créer la tournée
+                            <i class="bi bi-lg bi-arrow-right-short" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
             </template>
-            <div class="alert alert-primary" v-if="status === Status.Found">
-                Cette tournée existe déjà
+            <div class="warning-msg" v-if="status === Status.Found">
+                <div class="icon">🍻</div>
+                <h4>Oups !</h4>
+                <p>Cette tournée existe déjà...</p>
+                <p>
+                    <a class="btn btn-primary" :href="'/' + id">
+                        Rejoindre la tournée
+                    </a>
+                </p>
             </div>
             <div class="alert alert-primary" v-if="error" v-text="error"></div>
         </form>

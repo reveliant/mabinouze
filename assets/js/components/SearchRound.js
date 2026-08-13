@@ -4,8 +4,7 @@ export default {
     data() {
       return {
         id: '',
-        password: '',
-        found: false,
+        status: this.Status.Waiting,
         passwordProtected: false,
         description: '',
         time: '',
@@ -14,7 +13,7 @@ export default {
     methods: {
         submit(event) {
             event.preventDefault();
-            if (this.found) {
+            if (this.status !== this.Status.NotFound) {
                 document.location.href = "/" + this.id + "/"
             }
         }
@@ -26,56 +25,43 @@ export default {
                 axios.get(this.urls.getRound.replace('<id>', this.id)).then((response) => {
                     this.description = response.data.description;
                     this.time = this.dayAndTime(response.data.time);
-                    this.found = true;
+                    this.status = this.Status.Found;
                     this.passwordProtected = false
                 }).catch((error) => {
                     switch (error.response.status) {
                         case 401:
                             this.passwordProtected = true;
-                            document.getElementById("search-password").focus();
+                            break;
+                        case 404:
+                            this.status = this.Status.NotFound;
                             break;
                         default:
                             this.passwordProtected = false;
+                            this.status = this.Status.Waiting;
                     }
                 })
             } else {
                 this.description = '';
                 this.time = '';
-                this.found = false;
+                this.status = this.Status.Waiting;
                 this.passwordProtected = false;
             }
         },
-        password(value){
-            this.password = value;
-            encodedPassword = this.base64UrlEncode(this.password);
-            axios.get(this.urls.getRound.replace('<id>', this.id), {
-                headers: {'Authorization': `Bearer ${encodedPassword}`}
-            }).then((response) => {
-                this.description = response.data.description;
-                this.time = this.dayAndTime(response.data.time);
-                this.found = true;
-                sessionStorage.setItem(`access:${this.id}`, encodedPassword)
-            }).catch((error) => {})
-        }
     },
     template: `
-        <form class="mb-5" @submit="submit">
+        <form @submit="submit">
             <div class="input-group">
                 <div class="form-floating">
                     <input type="text" class="form-control" id="search-round" pattern="[A-Za-z0-9\\-]{4}[A-Za-z0-9]{0,251}" minlength="4" maxlength="255" placeholder="Nom de la tournée" required v-model.trim="id">
                     <label for="search-round">Indique le nom de la tournée</label>
                 </div>
-                <div class="form-floating" v-show="passwordProtected">
-                    <input type="password" class="form-control" id="search-password" placeholder="Mot de passe d'accès" v-model="password">
-                    <label for="search-password">Cette tournée nécessite un mot de passe d'accès</label>
-                </div>
-                <input type="submit" class="btn btn-primary" value="Rejoindre" :disabled="!found">
+                <input type="submit" class="btn btn-primary" value="Rejoindre" :disabled="status == Status.NotFound">
             </div>
-            <div class="form-text" v-if="found">
+            <!--<div class="form-text" v-if="status == Status.Found">
                 <span v-if="description">{{ description }}</span>
                 <span v-if="description && time">, </span>
                 <span v-if="time">{{ time }}</span>
-            </div>
+            </div>-->
         </form>
     `
   }

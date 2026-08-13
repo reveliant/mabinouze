@@ -1,0 +1,225 @@
+
+.footer {
+	color: $white;
+	position: relative;
+	z-index: 0;
+	margin-top: 50px;
+	padding: 4em 0 2em;
+}
+
+.footer-beer {
+	/* Couleur de secours */
+	background-color: #E18B00;
+
+	/* Les différentes couches */
+	background:
+		/* Halo lumineux */
+		radial-gradient(
+			ellipse 80% 120% at 50% 10%,
+			rgba(255,235,170,.55) 0%,
+			rgba(255,205,90,.28) 38%,
+			rgba(255,180,0,0) 75%
+		),
+		/* Ombres des bords */
+		radial-gradient(
+			ellipse at center,
+			transparent 55%,
+			rgba(140,65,0,.08) 82%,
+			rgba(70,25,0,.22) 100%
+		),
+		/* Dégradé principal */
+		linear-gradient(
+			180deg,
+			#FFF7EA 0%,
+			#FFE18D 10%,
+			#FFC54D 28%,
+			#F2A11A 48%,
+			#D97A16 72%,
+			#C35A1B 90%,
+			#A84516 100%
+		);
+}
+
+.footer-foam {
+	position: absolute;
+	inset: -50px 0 0;
+	height: 140px;
+	z-index: -1;
+	background-image: url('/footer-foam.png');
+	background-position: center 0;
+	background-size: 566px;
+	background-repeat: repeat-x;
+}
+
+.footer-bubbles {
+	position: absolute;
+	inset: 0;
+	height: 100%;
+	z-index: -2;
+	opacity: .15;
+	background-image: url('/footer-bubbles.png');
+	background-size: 768px;
+	background-position: 0 40px;
+}
+
+.footer-links {
+	display: grid;
+	grid-template-areas: "brand" "info" "share";
+	margin: 0 1em;
+	column-gap: 4em;
+	
+	@include media-breakpoint-up(sm) {
+		grid-template-areas:
+			"brand brand"
+			"info share";
+		justify-content: space-evenly;
+	}
+
+	@include media-breakpoint-up(lg) {
+		grid-template-areas: "brand info share";
+		justify-content: space-between;
+	}
+
+	h5 {
+		text-wrap: nowrap;
+	}
+	
+	a {
+		@extend .text-reset;
+		@extend .link-offset-2;
+		@extend .link-underline;
+		@extend .link-underline-opacity-0;
+		@extend .link-underline-opacity-100-hover;
+		@extend .my-1;
+	}
+}
+
+.footer-brand {
+	grid-area: brand;
+}
+
+.footer-brand svg {
+	background-image: radial-gradient(closest-side, #ffffff66, transparent);
+	padding-bottom: .8em;
+	margin-bottom: calc(1rem - .8em);
+}
+
+.footer-motto {
+	@extend .font-handwritten;
+	font-size: 2em;
+	line-height: 1;
+	font-weight: bold;
+	opacity: .85;
+	@extend .span-nowrap;
+}
+
+.footer-info {
+	@extend .mt-4;
+	grid-area: info;
+}
+
+.footer-share {
+	@extend .mt-4;
+	grid-area: share;
+	display: grid;
+	grid-template-areas:
+		"title title"
+		"qrcode caption";
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	column-gap: 1em;
+
+	h5 {
+		grid-area: title;
+	}
+
+	.qrcode {
+		grid-area: qrcode;
+		display: inline-block;
+		position: relative;
+	}
+	.qrcode img {
+		aspect-ratio: 1 / 1;
+		@extend .rounded;
+	}
+	.qrcode::after {
+		content: '';
+		position: absolute;
+		width: 16%;
+		aspect-ratio: 1 / 1;
+		left: 50%;
+		top: 50%;
+		transform: translateX(-50%) translateY(-50%);
+		background-color: white;
+		background-image: url('/dropcap.svg');
+		background-size: 90%;
+	}
+
+	.caption {
+		grid-area: caption;
+	}
+}
+
+.prevention {
+	display: grid;
+	align-items: center;
+	grid-template-columns: 1fr;
+	gap: 3em;
+	font-size: .9rem;
+	font-weight: 400;
+	border: 1px solid change-color($white, $alpha: .25);
+	@extend .px-4;
+	@extend .py-3;
+	@extend .rounded-4;
+
+	@include media-breakpoint-up(md) {
+		gap: 4em;
+		align-items: baseline;
+		grid-template-columns: repeat(3, 1fr);
+		font-size: .9rem;
+	}
+
+	@include media-breakpoint-up(xl) {
+		gap: 4em;
+		align-items: center;
+	}
+}
+
+.prevention-item {
+	display: flex;
+	align-items: center;
+	flex: 1 1 auto;
+	@extend .gap-3;
+	@extend .py-2;
+
+	.icon {
+		width: 3.5em;
+		vertical-align: middle;
+	}
+
+	p {
+		margin-bottom: 0;
+		text-align: justify;
+	}
+
+	@include media-breakpoint-up(md) {
+		flex-direction: column;
+	}
+
+	@include media-breakpoint-up(xl) {
+		flex-direction: row;
+	}
+}
+
+.prevention-item+.prevention-item {
+	margin: -2em 0 0 0 !important;
+	padding: 2em 0 0 0 !important;
+	border-top: 1px solid change-color($white, $alpha: .35);
+
+	@include media-breakpoint-up(md) {
+		margin: 0 0 0 -2em !important;
+		padding: 0 0 0 2em !important;
+		border-top: none;
+		border-left: 1px solid change-color($white, $alpha: .35);
+	}
+}

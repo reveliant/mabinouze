@@ -1,8 +1,9 @@
 ---
 title: Mentions légales
+slug: legal
+menus: footer
+weight: 10
 ---
-## Cadre légal
-
 Cette application est un service de communication au public en ligne édité à titre non professionnel au sens de l’[article 6, III, 2° de la loi 2004-575 du 21 juin 2004](http://legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000028345121&cidTexte=LEGITEXT000005789847).
 Conformément aux dispositions de cet article, son éditeur a choisi de rester anonyme.
 
@@ -56,7 +57,6 @@ L'ensemble des mots de passe est traité par un procédé cryptographique (algor
 
 Images fournies par [Unsplash](https://unsplash.com/) :
 
-- [A close up of a glass of beer with drops of water](https://unsplash.com/fr/photos/Lq1rOaigDoY) de [Timothy Dykes](https://unsplash.com/fr/@timothycdykes)
 - [People having a toast](https://unsplash.com/fr/photos/snnhGYNqm44) de [Elevate](https://unsplash.com/fr/@elevatebeer)
 - [Two mugs of brown liquids](https://unsplash.com/fr/photos/NmvMhov1sYc) de [kazuend](https://unsplash.com/fr/@kazuend)
 - [Photography of person holding glass bottles during sunset](https://unsplash.com/fr/photos/UErWoQEoMrc) de [Wil Stewart](https://unsplash.com/fr/@wilstewart3)
@@ -66,3 +66,4 @@ Images fournies par [Unsplash](https://unsplash.com/) :
 - [Person holding stainless steel spoon in brown ceramic mug](https://unsplash.com/fr/photos/FV27_pbpWk0) de [Gary Meulemans](https://unsplash.com/@anakin1814)
 - [Woman in black tank top holding clear wine glass](https://unsplash.com/fr/photos/7EbGkOm8pWM) de [Helena Yankovska](https://unsplash.com/@helenayankovska)
 - [Shallow focus photo of brown glass bottle](https://unsplash.com/fr/photos/KYuANAfgTWA) de [Eeshan Garg](https://unsplash.com/@iameeshangarg)
+- [Person filling beer on glass](https://unsplash.com/fr/photos/VJXLzQi5TlE) de [Amie Johnson](https://unsplash.com/fr/@emergeartistry)

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html class="h-100" lang="{{ .Language.Locale }}">
+    <head>
+        <meta charset="utf-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>{{- if and (not .IsHome) (ne .RelPermalink "/404.html") }}{{ .Title }} | {{ end }}{{ .Site.Title }} {{ .Site.Params.icon }}</title>
+
+        <meta name="build" content="{{ now | time.Format "2006-01-02" }}">
+        {{ hugo.Generator }}
+        <meta name="application-name" content="{{ .Site.Title }}" lang="fr">
+		<meta name="apple-mobile-web-app-title" content="{{ .Site.Title }}">
+		<link rel="shortcut icon" href="/dropcap.svg">
+		<link rel="apple-touch-icon" sizes="256x256" href="/apple-touch-icon.png">
+		{{- with resources.Get "manifest.json" | resources.ExecuteAsTemplate "manifest.json" . }}
+		<link rel="manifest" href="{{ .RelPermalink }}">
+		{{- end }}
+		<meta name="theme-color" content="#d63384">
+		<meta name="color-scheme" content="only light">
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous" referrerpolicy="no-referrer">
+        {{- $cssOptions := dict
+            "transpiler" "libsass"
+            "targetPath" "css/style.css"
+            "enableSourceMap" true
+        }}
+        {{- with resources.Get "sass/main.scss" | toCSS $cssOptions | minify | resources.Fingerprint "sha512" }}
+        <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+        {{- end }}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        {{- $vueFile := "vendors/vue.esm-browser.min.js" }}
+        {{- if hugo.IsProduction }}
+            {{- $vueFile = "vendors/vue.esm-browser.prod.min.js" }}
+        {{- else }}
+        {{- $vueFile := "vendors/vue.esm-browser.min.js" }}
+        {{- end }}
+        {{- $jsOptions := dict
+            "minify" "true"
+            "params" (dict
+                "baseURL" site.BaseURL
+                "api" site.Params.api
+            )
+            "shims" (dict
+                "vue" $vueFile
+                "axios" "vendors/axios.js"
+                "luxon" "vendors/luxon.min.js"
+                "mitt" "vendors/mitt.min.js"
+                "vue-qr" "vendors/vue-qr.js"
+            )
+        }}
+        {{- with resources.Get "js/main.js" | js.Build $jsOptions | resources.Fingerprint "sha512" }}
+        <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+        {{- end }}
+    </head>
+    <body class="h-100 d-flex flex-column {{ .Slug }}">
+        <nav class="navbar bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-2 me-auto mb-1" href="{{ .Site.Home.RelPermalink }}">
+                    <svg viewBox="0 0 1470 310" height="48" fill="currentColor">
+                        <use xlink:href="/logo.svg#logo"/>
+                    </svg>
+                </a>
+                <button class="btn btn-outline-secondary px-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Paramètres utilisateur">
+                    <i class="bi bi-person-bounding-box"></i>
+                </button>
+            </div>
+        </nav>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="navbar-menu">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="settings-label">Paramètres</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <settings></settings>
+            </div>
+        </div>
+        {{ block "main" . }}{{ .Content }}{{ end }}
+        <footer class="footer footer-beer">
+            <div class="footer-foam"></div>
+            <div class="footer-bubbles"></div>
+            <div class="container-md">
+                <div class="footer-links">
+                    <div class="footer-brand">
+                        <svg viewBox="0 0 1455 304" height="64" fill="currentColor">
+                            <use xlink:href="/logo.svg#logo"/>
+                        </svg>
+                        <p class="footer-motto">
+                            <span>Moins de prise de tête,</span> <span>place à la fête&nbsp;!</span>
+                        </p>
+                    </div>
+                    <div class="footer-info">
+                        <h5>Informations</h5>
+                        <nav class="nav flex-column">
+                        {{- range .Site.Menus.footer }}
+                            {{ if $.IsMenuCurrent .Menu . }}
+                            <a class="nav-item active" aria-current="page" href="{{ .URL }}">{{ .Name }}</a>
+                            {{ else }}
+                            <a class="nav-item" href="{{ .URL }}">{{ .Name }}</a>
+                            {{ end }}
+                        {{- end }}
+                            <a class="nav-item" href="{{ .Site.Params.repository }}">Code source</a>
+                        </nav>
+                    </div>
+                    <div class="footer-share">
+                        <h5>Partager {{ .Site.Title }}</h5>
+                        {{ $opts := dict
+                            "level" "high"
+                        }}
+                        {{ with images.QR .Site.BaseURL $opts }}
+                        <figure class="qrcode">
+                            <img src="{{ .RelPermalink }}" width="{{ .Width }}" alt="{{ $.Site.BaseURL }}">
+                        </figure>
+                        <p class="caption">Scanne-moi<br>pour lancer<br>l'application</p>
+                        {{ end }}
+                    </div>
+                </div>
+                <div class="prevention">
+                    <div class="prevention-item">
+                        <img class="icon" src="/alcool-mineur.svg" alt="Alcool interdit aux mineurs">
+                        <p>L'abus d'alcool est dangereux pour la santé.<br>À consommer avec modération.</p>
+                    </div>
+                    <div class="prevention-item">
+                        <img class="icon" src="/alcool-grossesse.svg" alt="Alcool et grossesse">
+                        <p>La consommation de boissons alcoolisées pendant la grossesse, même en faible quantité, peut avoir des conséquences graves sur la santé de l’enfant.</p>
+                    </div>
+                    <div class="prevention-item">
+                        <img class="icon" src="/alcool-voiture.svg" alt="Alcool au volant">
+                        <p>Celui qui conduit, c'est celui qui ne boit pas.<br>Si tu reprends la route, pense à désigner un Sam&nbsp;!</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+  </html>
