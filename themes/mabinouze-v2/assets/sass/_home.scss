@@ -19,7 +19,7 @@
 }
 
 .hero {
-	font-size: 4rem;
+	font-size: 3.5rem;
 	line-height: 1.05;
 	font-weight: 700;
 
@@ -44,24 +44,23 @@
 .hero-card {
 	@extend .card;
 	@extend .shadow;
-	@extend .align-items-center;
 	display: grid;
 	grid-template-areas:
-	"icon title action"
-	"addon addon addon";
+		"icon title action"
+		"icon addon action";
 	grid-template-columns: fit-content(100%) 1fr fit-content(100%);
+	align-items: center;
 	@extend .p-2;
 	@extend .mb-4;
 	@extend .mb-md-5;
 	
 	.hero-icon {
 		grid-area: icon;
-		margin-right: .25rem;
 	}
 
 	h5 {
 		grid-area: title;
-		align-self: center;
+		align-self: self-end;
 		margin-bottom: 0;
 	}
 	
@@ -72,19 +71,32 @@
 	
 	p {
 		margin-bottom: .5rem;
-		text-align: center;
+		font-weight: 200;
+		@extend .span-nowrap;
 	}
 	
 	.action-icon {
 		grid-area: action;
-		margin: .75rem;
-		margin-left: 1rem;
+		margin-right: .25rem;
 	}
-	
+
+	@include media-breakpoint-down(xs) {
+		h5 {
+			font-size: 1.275rem;
+		}
+		p {
+			font-size: 1.1rem;
+
+			span {
+				text-wrap: wrap;
+			}
+		}
+	}
+
 	@include media-breakpoint-up(sm) {
 		grid-template-areas:
-		"icon title action"
-		"icon addon action";
+			"icon title action"
+			"icon addon action";
 		
 		.hero-icon {
 			font-size: calc(1.425rem + 2.1vw); // .fs-1
@@ -93,12 +105,10 @@
 		}
 
 		h5 {
-			align-self: self-end;
 			margin-bottom: .5rem;
 		}
 		
 		p {
-			text-align: inherit;
 			margin-bottom: 0;
 		}
 		
@@ -183,15 +193,21 @@ ul.plue-value {
 	grid-template-columns: repeat(var(--columns), 1fr);
 	gap: .5em;
 	margin-top: -3em;
-	margin-bottom: 5em;
+	margin-bottom: 1.5em;
 	
 	@include media-breakpoint-up(sm) {
 		--columns: 3;
 		gap: 1em;
+		margin-bottom: 3em;
 	}
 	
 	@include media-breakpoint-up(lg) {
 		--columns: 4;
+		margin-bottom: 4em;
+	}
+	
+	@include media-breakpoint-up(xl) {
+		margin-bottom: 5em;
 	}
 	
 	& > img  {

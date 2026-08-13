@@ -79,7 +79,7 @@ export default {
             </div> 
         </div>
         <h3 class="h1 mt-2 mb-3" v-text="description" v-if="!noQrcode"></h3>
-        <h2 class="d-sm-flex justify-content-between align-items-center mb-3" v-if="noQrcode">
+        <h2 class="d-flex justify-content-between align-items-center mb-3" v-if="noQrcode">
             <div class="d-flex flex-column">
                 <span class="text-primary font-monospace" v-text="id"></span>
                 <span v-text="description"></span>

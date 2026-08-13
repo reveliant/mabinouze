@@ -53,15 +53,10 @@ export default {
             <div class="input-group">
                 <div class="form-floating">
                     <input type="text" class="form-control" id="search-round" pattern="[A-Za-z0-9\\-]{4}[A-Za-z0-9]{0,251}" minlength="4" maxlength="255" placeholder="Nom de la tournée" required v-model.trim="id">
-                    <label for="search-round">Indique le nom de la tournée</label>
+                    <label for="search-round">Nom de la tournée</label>
                 </div>
                 <input type="submit" class="btn btn-primary" value="Rejoindre" :disabled="status == Status.NotFound">
             </div>
-            <!--<div class="form-text" v-if="status == Status.Found">
-                <span v-if="description">{{ description }}</span>
-                <span v-if="description && time">, </span>
-                <span v-if="time">{{ time }}</span>
-            </div>-->
         </form>
     `
   }
