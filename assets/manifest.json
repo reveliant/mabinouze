@@ -3,7 +3,7 @@
     "short_name": "{{ .Site.Title }}",
     "description": "{{ .Site.Params.description }}",
     "background_color": "#ffb100",
-    "theme_color": "#ffb100",
+    "theme_color": "#1e1e1e",
     "start_url": "/",
     "dir": "ltr",
     "scope": "{{ .Site.BaseURL }}",
@@ -21,11 +21,6 @@
           "src": "/icon.svg",
           "sizes": "any",
           "purpose": "any maskable"
-        },
-        {
-          "src": "/mask.svg",
-          "sizes": "any",
-          "purpose": "monochrome"
         }
     ]
 }
