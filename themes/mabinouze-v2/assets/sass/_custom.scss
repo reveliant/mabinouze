@@ -263,9 +263,9 @@ $table-hover-bg:        #FFF6E6;
 // Fusion
 // ============================================================================
 
-@import 'bootstrap/functions';
-@import 'bootstrap/variables';
-@import 'bootstrap/variables-dark';
+@import '../bootstrap/scss/functions';
+@import '../bootstrap/scss/variables';
+@import '../bootstrap/scss/variables-dark';
 $custom-colors: (
 	"beer": $beer,
 	"beer-light": $beer-light,

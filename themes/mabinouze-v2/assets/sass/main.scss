@@ -20,7 +20,7 @@ $primary-img: url(/unsplash/Lq1rOaigDoY-reduce.jpeg);
 }
 
 @import 'custom';
-@import 'bootstrap/bootstrap';
+@import '../bootstrap/scss/bootstrap';
 @import 'bootstrap-icons';
 
 .font-handwritten {

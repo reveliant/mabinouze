@@ -1,7 +1,7 @@
 $primary: #f6aa0a;
 $primary-img: url(/unsplash/Lq1rOaigDoY-reduce.jpeg);
 
-@import 'bootstrap/bootstrap';
+@import '../bootstrap/scss/bootstrap';
 
 .small-caps {
     font-variant: small-caps;
