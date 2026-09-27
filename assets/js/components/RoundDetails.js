@@ -64,7 +64,7 @@ export default {
                     case 401:
                     case 403:
                         this.status = this.Status.NotAutenticated;
-                        document.getElementById("details-password").focus();
+                        document.getElementById("round-password").focus();
                         sessionStorage.removeItem(`admin:${this.id}`)
                         break;
                     case 404:
