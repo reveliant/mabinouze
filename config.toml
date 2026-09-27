@@ -2,7 +2,7 @@ baseURL = "https://mabinouze.fr/"
 locale = "fr-fr"
 title = "Ma binouze"
 enableInlineShortcodes = true
-disableKinds = ['taxonomy', 'term', 'RSS']
+disableKinds = ['taxonomy', 'term', 'RSS', 'section', 'sitemap']
 theme = "mabinouze-v2"
 
 [params]
@@ -19,3 +19,8 @@ title = true
 
 [security]
 allowContent = ['text/html', 'text/markdown']
+
+[build]
+noJSConfigInAssets = true
+useResourceCacheWhen = "fallback"
+writeStats = false
