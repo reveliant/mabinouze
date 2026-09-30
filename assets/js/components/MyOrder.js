@@ -29,7 +29,7 @@ export default {
                     return axios.post(this.urls.getRoundOrder.replace('<id>', this.id), {
                         tippler: this.settings.username,
                         password: this.settings.password,
-                    }, this.config()).then((response) => {
+                    }, this.orderConfig()).then((response) => {
                         this.orderId = response.data.id;
                         this.createDrink(msg.drink)
                     })
@@ -61,6 +61,15 @@ export default {
                 this.emitter.emit('updateOrder')
                 this.update()
             })
+        },
+        orderConfig() {
+            if ((access_token = sessionStorage.getItem(`access:${this.id}`)) != null) {
+                // Round Access token
+                return {
+                    headers: {'Authorization': `Bearer ${access_token}`}
+                };
+            }
+            return {};
         },
         config() {
             return {
@@ -117,6 +126,10 @@ export default {
             <Drink class="ps-1" v-for="[name, drink] in drinks" v-bind="drink" :config="config()"></Drink>
             <NewDrink class="ps-1"></NewDrink>
         </ul>
+        <div class="alert alert-danger" v-if="status === Status.NotAutenticated">
+            Ton mot de passe est erroné.
+            <a href="#" class="alert-link" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">Changer les paramètres</a>
+        </div>
         <div class="alert alert-danger" v-if="status === Status.NotAuthorized">
             Ton nom est déjà utilisé par un homonyme dans une commande.
             <a href="#" class="alert-link" data-bs-toggle="offcanvas" data-bs-target="#navbar-menu">Changer les paramètres</a>

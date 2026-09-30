@@ -39,7 +39,7 @@ export default {
         },
         config() {
             return {
-                headers: {'Authorization': `Bearer ${this.base64UrlEncode(this.username)}.${this.base64UrlEncode(this.password)}`}
+                headers: {'Authorization': `Bearer ${sessionStorage.getItem(`admin:${this.round}`)}`}
             };
         },
     },
@@ -55,7 +55,7 @@ export default {
                 </div>
                 <div class="col-md-4">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="neworder-password" aria-describedby="neworder-password-help" placeholder="Mot de passe" v-model="password">
+                        <input type="password" class="form-control" id="neworder-password" aria-describedby="neworder-password-help" placeholder="Mot de passe" v-model="password">
                         <label for="neworder-password" id="neworder-password">Mot de passe</label>
                     </div>
                 </div>
